@@ -3,12 +3,33 @@ import { useAuthStore } from '../stores/auth'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import Projects from '../views/Projects.vue'
+import CreateProject from '../views/CreateProject.vue'
+import ProjectDetail from '../views/ProjectDetail.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/projects',
+    name: 'Projects',
+    component: Projects,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/projects/create',
+    name: 'CreateProject',
+    component: CreateProject,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/projects/:id',
+    name: 'ProjectDetail',
+    component: ProjectDetail,
     meta: { requiresAuth: true }
   },
   {

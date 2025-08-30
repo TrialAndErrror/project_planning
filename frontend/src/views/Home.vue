@@ -20,8 +20,8 @@
       </div>
       
       <div class="actions">
-        <button class="btn btn-primary">Create New Project</button>
-        <button class="btn btn-secondary">View Projects</button>
+        <router-link to="/projects/create" class="btn btn-primary">Create New Project</router-link>
+        <router-link to="/projects" class="btn btn-secondary">View Projects</router-link>
       </div>
     </div>
   </div>

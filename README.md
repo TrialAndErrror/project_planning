@@ -5,7 +5,14 @@ A full-stack project management application built with Django backend and Vue.js
 ## Features
 
 - **Authentication System**: User registration and login with email/password
+- **Project Planning**: Comprehensive project management with stages, tasks, and timelines
+- **Time Tracking**: 15-minute increment time estimates and actual time tracking
+- **Task Dependencies**: Manage task dependencies and prevent circular dependencies
+- **Progress Tracking**: Automatic calculation of project and stage progress
 - **Modern UI**: Beautiful, responsive interface built with Vue 3 and Vite
+- **Tree View Interface**: Visual project structure with stages and tasks
+- **Modal Editing**: In-place editing of projects, stages, and tasks
+- **Real-time Updates**: Live project statistics and progress tracking
 - **RESTful API**: Django REST Framework backend with token authentication
 - **Database**: PostgreSQL for reliable data storage
 - **Containerized**: Easy deployment with Docker Compose
@@ -111,6 +118,32 @@ project_planning/
 ### User Management
 - `GET /api/users/profile/` - Get user profile (authenticated)
 - `GET /api/users/auth-status/` - Check authentication status
+
+### Project Management
+- `GET /api/projects/` - List all projects
+- `POST /api/projects/` - Create a new project
+- `GET /api/projects/{id}/` - Get project details
+- `GET /api/projects/{id}/timeline/` - Get project timeline
+- `GET /api/projects/{id}/statistics/` - Get project statistics
+
+### Stage Management
+- `GET /api/stages/` - List all stages
+- `POST /api/stages/` - Create a new stage
+- `POST /api/stages/{id}/reorder/` - Reorder stages
+
+### Task Management
+- `GET /api/tasks/` - List all tasks
+- `POST /api/tasks/` - Create a new task
+- `POST /api/tasks/{id}/start/` - Start a task
+- `POST /api/tasks/{id}/complete/` - Complete a task
+- `POST /api/tasks/{id}/add_time/` - Add time to task
+- `GET /api/tasks/overdue/` - Get overdue tasks
+- `GET /api/tasks/upcoming/` - Get upcoming tasks
+
+### Timeline & Dependencies
+- `GET /api/timelines/` - List all timelines
+- `GET /api/dependencies/` - List all dependencies
+- `POST /api/dependencies/` - Create task dependency
 
 ## Development
 
