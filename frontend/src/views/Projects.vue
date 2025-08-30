@@ -1,61 +1,73 @@
 <template>
   <div class="projects">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container-fluid py-4">
       <!-- Header -->
-      <div class="d-flex items-center justify-between mb-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">My Projects</h1>
-          <p class="text-gray-600 mt-2">Manage and track your project planning</p>
+          <h1 class="h2 text-dark mb-2">My Projects</h1>
+          <p class="text-muted mb-0">Manage and track your project planning</p>
         </div>
         <router-link
           to="/projects/create"
-          class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="btn btn-primary"
         >
-          + New Project
+          <i class="bi bi-plus-circle me-2"></i>New Project
         </router-link>
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="flex justify-center items-center h-64">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div v-if="loading" class="d-flex justify-content-center align-items-center" style="min-height: 300px;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-center py-8">
-        <div class="text-red-600 text-lg mb-4">{{ error }}</div>
-        <button @click="loadProjects" class="text-blue-600 hover:text-blue-800">
-          Try Again
-        </button>
+      <div v-else-if="error" class="text-center py-5">
+        <div class="alert alert-danger d-inline-block" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ error }}
+        </div>
+        <div class="mt-3">
+          <button @click="loadProjects" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-clockwise me-2"></i>Try Again
+          </button>
+        </div>
       </div>
 
       <!-- Projects List -->
-      <div v-if="projects.length > 0" class="space-y-6">
+      <div v-if="projects.length > 0">
         <ProjectsListSummary />
-        <ProjectCard
-          v-for="project in projects"
-          :key="project.id"
-          :project
-        />
+        <div class="row g-4">
+          <div class="col-12">
+            <ProjectCard
+              v-for="project in projects"
+              :key="project.id"
+              :project="project"
+            />
+          </div>
+        </div>
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-12">
-        <div class="max-w-md mx-auto">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-          </svg>
-          <h3 class="mt-4 text-lg font-medium text-gray-900">No projects yet</h3>
-          <p class="mt-2 text-gray-600">Get started by creating your first project.</p>
-          <div class="mt-6">
+      <div v-else class="text-center py-5">
+        <div class="card border-0 shadow-sm mx-auto" style="max-width: 400px;">
+          <div class="card-body p-5">
+            <div class="empty-state-icon mb-4">
+              <i class="bi bi-folder-x text-muted"></i>
+            </div>
+            <h3 class="h5 text-dark mb-3">No projects yet</h3>
+            <p class="text-muted mb-4">Get started by creating your first project.</p>
             <router-link
               to="/projects/create"
-              class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="btn btn-primary btn-lg"
             >
-              Create Your First Project
+              <i class="bi bi-plus-circle me-2"></i>Create Your First Project
             </router-link>
           </div>
         </div>
       </div>
+      
     </div>
   </div>
 </template>
@@ -86,15 +98,32 @@ onMounted(() => {
 <style scoped>
 .projects {
   min-height: 100vh;
-  background-color: #f9fafb;
-  border-radius: 1rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 1rem;
 }
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+
+.empty-state-icon {
+  font-size: 4rem;
+  opacity: 0.6;
 }
 
+.empty-state-icon i {
+  font-size: 4rem;
+}
 
+@media (max-width: 767.98px) {
+  .projects {
+    padding: 0.5rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
 </style> 
