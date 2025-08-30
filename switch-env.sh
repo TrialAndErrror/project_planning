@@ -64,9 +64,8 @@ function switch_to_prod() {
     echo ""
     echo "📝 Production features:"
     echo "   - Gunicorn WSGI server"
-    echo "   - Nginx reverse proxy"
-    echo "   - SSL support (configure manually)"
-    echo "   - Rate limiting"
+    echo "   - Lightweight HTTP server"
+    echo "   - SSL support (configure with Caddy)"
     echo "   - Security headers"
     echo "   - File logging"
 }

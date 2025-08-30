@@ -11,7 +11,6 @@ This project supports both development and production deployments with separate 
 ├── backend/core/settings_dev.py # Development settings
 ├── env.dev                     # Development environment variables
 ├── env.prod                    # Production environment variables template
-├── nginx/nginx.conf            # Main nginx configuration
 └── frontend/Dockerfile.prod    # Production frontend Dockerfile
 ```
 
@@ -78,20 +77,16 @@ docker-compose up --build -d
 ### 4. Production Features
 
 - **Gunicorn** WSGI server for Django
-- **Nginx** reverse proxy with SSL support
+- **Lightweight HTTP server** for static file serving
 - **Production database** with proper security
 - **Email verification** with SMTP
 - **Static file serving** with caching
-- **Rate limiting** and security headers
+- **Security headers**
 - **Logging** to files and console
 
 ### 5. SSL Configuration (Optional)
 
-To enable HTTPS:
-
-1. Add your SSL certificates to `nginx/ssl/`
-2. Uncomment SSL configuration in `nginx/nginx.conf`
-3. Update your domain in the nginx configuration
+To enable HTTPS, configure your personal Caddy server to handle SSL termination and proxy requests to the application containers.
 
 ## Environment Variables
 
@@ -167,7 +162,6 @@ docker-compose logs -f
 
 # View specific service logs
 docker-compose logs -f backend
-docker-compose logs -f nginx
 ```
 
 ## Backup and Restore
