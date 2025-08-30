@@ -1,48 +1,65 @@
 <template>
   <div class="login-container">
-    <div class="login-card">
-      <h1>Login</h1>
-      <p class="subtitle">Welcome back! Please sign in to your account.</p>
-      
-      <form @submit.prevent="handleLogin" class="login-form">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            v-model="email"
-            required
-            placeholder="Enter your email"
-            class="form-input"
-          />
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+        <div class="card shadow-lg border-0 login-card">
+          <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+              <h1 class="h2 text-dark mb-2">Login</h1>
+              <p class="text-muted mb-0">Welcome back! Please sign in to your account.</p>
+            </div>
+            
+            <form @submit.prevent="handleLogin">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  v-model="email"
+                  required
+                  placeholder="Enter your email"
+                  class="form-control"
+                />
+              </div>
+              
+              <div class="mb-4">
+                <label for="password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  v-model="password"
+                  required
+                  placeholder="Enter your password"
+                  class="form-control"
+                />
+              </div>
+              
+              <div v-if="error" class="alert alert-danger mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ error }}
+              </div>
+              
+              <button type="submit" class="btn btn-primary w-100 mb-3" :disabled="loading">
+                <span v-if="loading" class="d-flex align-items-center justify-content-center">
+                  <div class="spinner-border spinner-border-sm me-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  Signing in...
+                </span>
+                <span v-else>
+                  <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </span>
+              </button>
+            </form>
+            
+            <div class="text-center">
+              <p class="text-muted mb-0">
+                Don't have an account? 
+                <router-link to="/register" class="text-decoration-none fw-semibold">Sign up</router-link>
+              </p>
+            </div>
+          </div>
         </div>
-        
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            v-model="password"
-            required
-            placeholder="Enter your password"
-            class="form-input"
-          />
-        </div>
-        
-        <div v-if="error" class="error-message">
-          {{ error }}
-        </div>
-        
-        <button type="submit" class="btn btn-primary" :disabled="loading">
-          {{ loading ? 'Signing in...' : 'Sign In' }}
-        </button>
-      </form>
-      
-      <div class="links">
-        <p>
-          Don't have an account? 
-          <router-link to="/register" class="link">Sign up</router-link>
-        </p>
       </div>
     </div>
   </div>
@@ -95,110 +112,50 @@ export default {
 
 <style scoped>
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
 }
 
 .login-card {
-  background: white;
-  padding: 3rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 1rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-h1 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
+.login-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2) !important;
 }
 
-.subtitle {
-  text-align: center;
-  color: #7f8c8d;
-  margin-bottom: 2rem;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-label {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.form-input {
-  padding: 0.75rem;
-  border: 2px solid #e1e8ed;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #3498db;
-}
-
-.error-message {
-  background: #e74c3c;
-  color: white;
-  padding: 0.75rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.btn {
-  padding: 0.75rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .btn-primary {
-  background: #3498db;
-  color: white;
+  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+  border: none;
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #2980b9;
+  background: linear-gradient(135deg, #0b5ed7 0%, #0a58ca 100%);
   transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.3);
 }
 
-.links {
-  text-align: center;
-  margin-top: 1.5rem;
+.btn-primary:disabled {
+  opacity: 0.7;
+  transform: none;
 }
 
-.link {
-  color: #3498db;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.link:hover {
-  text-decoration: underline;
+@media (max-width: 767.98px) {
+  .login-card {
+    margin: 1rem;
+  }
+  
+  .card-body {
+    padding: 2rem !important;
+  }
 }
 </style> 
