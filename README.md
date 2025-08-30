@@ -5,6 +5,7 @@ A full-stack project management application built with Django backend and Vue.js
 ## Features
 
 - **Authentication System**: User registration and login with email/password
+- **OAuth Integration**: Google OAuth support for easy sign-in
 - **Modern UI**: Beautiful, responsive interface built with Vue 3 and Vite
 - **RESTful API**: Django REST Framework backend with token authentication
 - **Database**: PostgreSQL for reliable data storage
@@ -44,22 +45,44 @@ A full-stack project management application built with Django backend and Vue.js
    cd project_planning
    ```
 
-2. **Start the services**
+2. **Configure OAuth (Optional but Recommended)**
+   
+   To enable Google OAuth:
+   
+   a. Go to [Google Cloud Console](https://console.cloud.google.com/)
+   b. Create a new project or select existing one
+   c. Enable Google+ API
+   d. Create OAuth 2.0 credentials
+   e. Add authorized redirect URI: `http://localhost:3000/oauth/callback`
+   f. Copy your Client ID and Client Secret
+   
+   Create a `.env` file in the `backend/` directory:
+   ```bash
+   cp backend/env.example backend/.env
+   ```
+   
+   Edit `backend/.env` and add your Google OAuth credentials:
+   ```
+   GOOGLE_CLIENT_ID=your-google-client-id
+   GOOGLE_CLIENT_SECRET=your-google-client-secret
+   ```
+
+3. **Start the services**
    ```bash
    docker-compose up --build
    ```
 
-3. **Run database migrations** (in a new terminal)
+4. **Run database migrations** (in a new terminal)
    ```bash
    docker-compose exec backend python manage.py migrate
    ```
 
-4. **Create a superuser** (optional)
+5. **Create a superuser** (optional)
    ```bash
    docker-compose exec backend python manage.py createsuperuser
    ```
 
-5. **Access the application**
+6. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8000
    - Django Admin: http://localhost:8000/admin
@@ -107,6 +130,11 @@ project_planning/
 - `POST /api/auth/login/` - User login
 - `POST /api/auth/logout/` - User logout
 - `POST /api/auth/registration/` - User registration
+
+### OAuth
+- `GET /api/users/oauth/providers/` - Get available OAuth providers
+- `GET /api/users/oauth/google/url/` - Get Google OAuth URL
+- `POST /api/users/oauth/google/callback/` - Handle Google OAuth callback
 
 ### User Management
 - `GET /api/users/profile/` - Get user profile (authenticated)
@@ -159,11 +187,22 @@ VITE_API_URL=http://localhost:8000
 
 ## Authentication Flow
 
+### Email/Password Authentication
 1. User registers with email and password
 2. Django creates user account and returns authentication token
 3. Frontend stores token in localStorage
 4. Token is sent with subsequent API requests
 5. Django validates token and returns user data
+
+### OAuth Authentication
+1. User clicks "Continue with Google" button
+2. Frontend redirects to Google OAuth consent screen
+3. User authorizes the application
+4. Google redirects back to frontend with authorization code
+5. Frontend sends code to Django backend
+6. Backend exchanges code for access token and gets user info
+7. Backend creates/updates user account and returns authentication token
+8. Frontend stores token and redirects to dashboard
 
 ## Contributing
 

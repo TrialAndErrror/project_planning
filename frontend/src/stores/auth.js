@@ -118,6 +118,51 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const getOAuthProviders = async () => {
+    try {
+      const response = await axios.get('/api/users/oauth/providers/')
+      return response.data.providers
+    } catch (error) {
+      console.error('Failed to get OAuth providers:', error)
+      return []
+    }
+  }
+
+  const getGoogleOAuthUrl = async () => {
+    try {
+      const response = await axios.get('/api/users/oauth/google/url/')
+      return response.data.oauth_url
+    } catch (error) {
+      console.error('Failed to get Google OAuth URL:', error)
+      throw error
+    }
+  }
+
+  const handleOAuthCallback = async (code) => {
+    try {
+      const response = await axios.post('/api/users/oauth/google/callback/', {
+        code: code
+      })
+      
+      const { token: authToken, user: userData } = response.data
+      
+      token.value = authToken
+      user.value = userData
+      isAuthenticated.value = true
+      
+      localStorage.setItem('token', authToken)
+      axios.defaults.headers.common['Authorization'] = `Token ${authToken}`
+      
+      return { success: true, isNewUser: response.data.is_new_user }
+    } catch (error) {
+      console.error('OAuth callback error:', error)
+      return { 
+        success: false, 
+        error: error.response?.data || 'OAuth authentication failed' 
+      }
+    }
+  }
+
   return {
     user,
     token,
@@ -125,6 +170,9 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     register,
     logout,
-    checkAuth
+    checkAuth,
+    getOAuthProviders,
+    getGoogleOAuthUrl,
+    handleOAuthCallback
   }
 }) 
