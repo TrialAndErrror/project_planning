@@ -17,23 +17,17 @@ ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
-# Production stage - using lightweight Alpine with Python HTTP server
-FROM alpine:latest
+# Production stage - using serve for SPA routing
+FROM node:18-alpine
 
-# Install Python for simple HTTP server
-RUN apk add --no-cache python3
+# Install serve globally
+RUN npm install -g serve
 
 # Copy built app from build stage
 COPY --from=build /app/dist /var/www/html
 
-# Create a simple HTTP server script
-RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'cd /var/www/html' >> /start.sh && \
-    echo 'python3 -m http.server 80' >> /start.sh && \
-    chmod +x /start.sh
-
 # Expose port 80
 EXPOSE 80
 
-# Start the HTTP server
-CMD ["/start.sh"] 
+# Start serve with SPA routing enabled
+CMD ["serve", "-s", "/var/www/html", "-l", "80"] 
