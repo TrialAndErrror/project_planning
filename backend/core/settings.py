@@ -162,10 +162,26 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7  # Email confirmation expires in 7 days
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5  # Limit login attempts
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # 5 minutes timeout
 
 # Email settings (for development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
+# For production, you would use:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # or your SMTP server
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your-app-password'
 
 # REST Auth settings
 REST_AUTH = {
@@ -173,6 +189,7 @@ REST_AUTH = {
     'TOKEN_MODEL': 'rest_framework.authtoken.models.Token',
     'USER_DETAILS_SERIALIZER': 'users.serializers.CustomUserDetailsSerializer',
     'LOGIN_SERIALIZER': 'users.serializers.CustomLoginSerializer',
+    'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {

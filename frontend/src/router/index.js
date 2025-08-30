@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import EmailConfirmation from '../views/EmailConfirmation.vue'
 import Projects from '../views/Projects.vue'
 import CreateProject from '../views/CreateProject.vue'
 import ProjectDetail from '../views/ProjectDetail.vue'
@@ -41,6 +42,12 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+    meta: { requiresGuest: true }
+  },
+  {
+    path: '/email-confirmation',
+    name: 'EmailConfirmation',
+    component: EmailConfirmation,
     meta: { requiresGuest: true }
   }
 ]

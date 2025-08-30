@@ -62,6 +62,11 @@
                 {{ error }}
               </div>
               
+              <div v-if="success" class="alert alert-success mb-4" role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                {{ success }}
+              </div>
+              
               <button type="submit" class="btn btn-primary w-100 mb-3" :disabled="loading">
                 <span v-if="loading" class="d-flex align-items-center justify-content-center">
                   <div class="spinner-border spinner-border-sm me-2" role="status">
@@ -105,10 +110,12 @@ export default {
     const password2 = ref('')
     const loading = ref(false)
     const error = ref('')
+    const success = ref('')
     
     const handleRegister = async () => {
       loading.value = true
       error.value = ''
+      success.value = ''
       
       // Basic validation
       if (password1.value !== password2.value) {
@@ -125,7 +132,12 @@ export default {
       )
       
       if (result.success) {
-        router.push('/')
+        success.value = result.message || 'Registration successful! Please check your email to verify your account.'
+        // Clear form
+        email.value = ''
+        username.value = ''
+        password1.value = ''
+        password2.value = ''
       } else {
         error.value = result.error?.non_field_errors?.[0] || 
                      result.error?.email?.[0] || 
@@ -144,6 +156,7 @@ export default {
       password2,
       loading,
       error,
+      success,
       handleRegister
     }
   }

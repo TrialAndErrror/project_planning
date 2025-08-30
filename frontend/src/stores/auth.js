@@ -63,16 +63,15 @@ export const useAuthStore = defineStore('auth', () => {
         username
       })
       
-      const { key, user: userData } = response.data
+      // With email verification enabled, the user won't be automatically logged in
+      // The response will contain a message about email verification
+      console.log('Registration response:', response.data)
       
-      token.value = key
-      user.value = userData
-      isAuthenticated.value = true
-      
-      localStorage.setItem('token', key)
-      api.defaults.headers.common['Authorization'] = `Token ${key}`
-      
-      return { success: true }
+      return { 
+        success: true, 
+        message: 'Registration successful! Please check your email to verify your account before logging in.',
+        data: response.data
+      }
     } catch (error) {
       console.error('Registration error:', error)
       return { 
