@@ -4,26 +4,35 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
+// Create a local axios instance
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const token = ref(localStorage.getItem('token'))
   const isAuthenticated = ref(false)
 
-  // Configure axios defaults
-  axios.defaults.baseURL = API_URL
-  axios.defaults.withCredentials = true
-
   // Set auth token in axios headers
   if (token.value) {
-    axios.defaults.headers.common['Authorization'] = `Token ${token.value}`
+    api.defaults.headers.common['Authorization'] = `Token ${token.value}`
   }
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/auth/login/', {
+      console.log('Attempting login with:', { email, password: '***' })
+      console.log('API URL:', API_URL)
+      
+      const response = await api.post('/api/auth/login/', {
         email,
         password
       })
+      
+      console.log('Login response:', response.data)
       
       const { key, user: userData } = response.data
       
@@ -32,11 +41,12 @@ export const useAuthStore = defineStore('auth', () => {
       isAuthenticated.value = true
       
       localStorage.setItem('token', key)
-      axios.defaults.headers.common['Authorization'] = `Token ${key}`
+      api.defaults.headers.common['Authorization'] = `Token ${key}`
       
       return { success: true }
     } catch (error) {
       console.error('Login error:', error)
+      console.error('Error response:', error.response)
       return { 
         success: false, 
         error: error.response?.data || 'Login failed' 
@@ -46,7 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const register = async (email, password1, password2, username = '') => {
     try {
-      const response = await axios.post('/api/auth/registration/', {
+      const response = await api.post('/api/auth/registration/', {
         email,
         password1,
         password2,
@@ -60,7 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
       isAuthenticated.value = true
       
       localStorage.setItem('token', key)
-      axios.defaults.headers.common['Authorization'] = `Token ${key}`
+      api.defaults.headers.common['Authorization'] = `Token ${key}`
       
       return { success: true }
     } catch (error) {
@@ -74,7 +84,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const logout = async () => {
     try {
-      await axios.post('/api/auth/logout/')
+      await api.post('/api/auth/logout/')
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
@@ -84,7 +94,7 @@ export const useAuthStore = defineStore('auth', () => {
       isAuthenticated.value = false
       
       localStorage.removeItem('token')
-      delete axios.defaults.headers.common['Authorization']
+      delete api.defaults.headers.common['Authorization']
     }
   }
 
@@ -95,7 +105,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     try {
-      const response = await axios.get('/api/users/auth-status/')
+      const response = await api.get('/api/users/auth-status/')
       if (response.data.authenticated) {
         user.value = response.data.user
         isAuthenticated.value = true
@@ -105,7 +115,7 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = null
         isAuthenticated.value = false
         localStorage.removeItem('token')
-        delete axios.defaults.headers.common['Authorization']
+        delete api.defaults.headers.common['Authorization']
       }
     } catch (error) {
       console.error('Auth check error:', error)
@@ -114,7 +124,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = null
       isAuthenticated.value = false
       localStorage.removeItem('token')
-      delete axios.defaults.headers.common['Authorization']
+      delete api.defaults.headers.common['Authorization']
     }
   }
 
