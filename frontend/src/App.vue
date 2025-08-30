@@ -3,7 +3,6 @@
     <nav v-if="authStore.isAuthenticated" class="navbar">
       <div class="nav-brand">Project Planning</div>
       <div class="nav-links">
-        <router-link to="/" class="nav-link">Home</router-link>
         <router-link to="/projects" class="nav-link">Projects</router-link>
         <button @click="logout" class="nav-link logout-btn">Logout</button>
       </div>
