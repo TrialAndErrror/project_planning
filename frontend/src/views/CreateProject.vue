@@ -1,94 +1,105 @@
 <template>
   <div class="create-project">
-    <div class="container mx-auto px-4 py-8">
-      <div class="max-w-2xl mx-auto">
-        <div class="bg-white rounded-lg shadow-lg p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">Create New Project</h1>
-            <router-link
-              to="/projects"
-              class="text-blue-600 hover:text-blue-800 font-medium"
-            >
-              ← Back to Projects
-            </router-link>
+    <div class="container-fluid py-4">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-xl-6">
+          <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2 text-dark mb-0">Create New Project</h1>
+                <router-link
+                  to="/projects"
+                  class="btn btn-outline-secondary btn-sm"
+                >
+                  <i class="bi bi-arrow-left me-2"></i>Back to Projects
+                </router-link>
+              </div>
+
+              <form @submit.prevent="handleSubmit">
+                <!-- Project Name -->
+                <div class="mb-3">
+                  <label for="name" class="form-label">
+                    Project Name <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    id="name"
+                    v-model="form.name"
+                    type="text"
+                    required
+                    class="form-control"
+                    :class="{ 'is-invalid': errors.name }"
+                    placeholder="Enter project name"
+                  />
+                  <div v-if="errors.name" class="invalid-feedback">
+                    {{ errors.name }}
+                  </div>
+                </div>
+
+                <!-- Project Description -->
+                <div class="mb-3">
+                  <label for="description" class="form-label">
+                    Description
+                  </label>
+                  <textarea
+                    id="description"
+                    v-model="form.description"
+                    rows="4"
+                    class="form-control"
+                    placeholder="Describe your project..."
+                  ></textarea>
+                </div>
+
+                <!-- Project Status -->
+                <div class="mb-4">
+                  <label for="status" class="form-label">
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    v-model="form.status"
+                    class="form-select"
+                  >
+                    <option value="planning">Planning</option>
+                    <option value="active">Active</option>
+                    <option value="on_hold">On Hold</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+
+                <!-- General Error Alert -->
+                <div v-if="errors.general" class="alert alert-danger mb-4" role="alert">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  {{ errors.general }}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-end gap-2">
+                  <router-link
+                    to="/projects"
+                    class="btn btn-outline-secondary"
+                  >
+                    Cancel
+                  </router-link>
+                  <button
+                    type="submit"
+                    :disabled="loading"
+                    class="btn btn-primary"
+                  >
+                    <span v-if="loading" class="d-flex align-items-center">
+                      <div class="spinner-border spinner-border-sm me-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      Creating...
+                    </span>
+                    <span v-else>
+                      <i class="bi bi-plus-circle me-2"></i>Create Project
+                    </span>
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-
-          <form @submit.prevent="handleSubmit" class="space-y-6">
-            <!-- Project Name -->
-            <div>
-              <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                Project Name *
-              </label>
-              <input
-                id="name"
-                v-model="form.name"
-                type="text"
-                required
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter project name"
-                :class="{ 'border-red-500': errors.name }"
-              />
-              <p v-if="errors.name" class="mt-1 text-sm text-red-600">
-                {{ errors.name }}
-              </p>
-            </div>
-
-            <!-- Project Description -->
-            <div>
-              <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                Description
-              </label>
-              <textarea
-                id="description"
-                v-model="form.description"
-                rows="4"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Describe your project..."
-              ></textarea>
-            </div>
-
-            <!-- Project Status -->
-            <div>
-              <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                Status
-              </label>
-              <select
-                id="status"
-                v-model="form.status"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="planning">Planning</option>
-                <option value="active">Active</option>
-                <option value="on_hold">On Hold</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="flex justify-end space-x-4">
-              <router-link
-                to="/projects"
-                class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Cancel
-              </router-link>
-              <button
-                type="submit"
-                :disabled="loading"
-                class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <span v-if="loading" class="flex items-center">
-                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Creating...
-                </span>
-                <span v-else>Create Project</span>
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
@@ -155,6 +166,43 @@ const handleSubmit = async () => {
 <style scoped>
 .create-project {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+@media (max-width: 767.98px) {
+  .create-project {
+    padding: 0.5rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  
+  .d-flex.justify-content-between.align-items-center {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+  
+  .btn {
+    width: 100%;
+  }
 }
 </style> 
