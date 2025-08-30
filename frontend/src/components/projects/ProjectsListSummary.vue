@@ -51,33 +51,64 @@ const totalEstimatedTime = computed(() => {
 <template>
 
   <!-- Summary Stats -->
-  <div v-if="projects.length > 0" class="project-summary-container bg-white rounded-lg shadow-lg p-6 mb-8">
-    <h2 class="text-xl font-semibold text-gray-900 mb-4">Project Summary</h2>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div class="text-center">
-        <div class="text-2xl font-bold text-blue-600">{{ totalProjects }}</div>
-        <div class="text-sm text-gray-600">Total Projects</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-green-600">{{ totalTasks }}</div>
-        <div class="text-sm text-gray-600">Total Tasks</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-orange-600">{{ completedTasks }}</div>
-        <div class="text-sm text-gray-600">Completed Tasks</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl font-bold text-purple-600">{{ totalEstimatedTime }}</div>
-        <div class="text-sm text-gray-600">Est. Time Remaining</div>
+  <div v-if="projects.length > 0" class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <h2 class="card-title h5 text-dark mb-4">Project Summary</h2>
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="text-center">
+            <div class="h3 fw-bold text-primary mb-1">{{ totalProjects }}</div>
+            <div class="small text-muted">Total Projects</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="text-center">
+            <div class="h3 fw-bold text-success mb-1">{{ totalTasks }}</div>
+            <div class="small text-muted">Total Tasks</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="text-center">
+            <div class="h3 fw-bold text-warning mb-1">{{ completedTasks }}</div>
+            <div class="small text-muted">Completed Tasks</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="text-center">
+            <div class="h3 fw-bold text-info mb-1">{{ totalEstimatedTime }}</div>
+            <div class="small text-muted">Est. Time Remaining</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.project-summary-container {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
+/* Custom styles for enhanced visual appeal */
+.card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.h3 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 767.98px) {
+  .h3 {
+    font-size: 1.5rem;
+  }
+  
+  .card-body {
+    padding: 1rem !important;
+  }
+}
 </style>
