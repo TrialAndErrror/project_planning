@@ -1,5 +1,6 @@
 <script setup>
 import {useProjectStore} from '../../stores/project.js'
+import { useRouter } from 'vue-router'
 
 // Define props
 const {project} = defineProps({
@@ -10,6 +11,7 @@ const {project} = defineProps({
 })
 
 const projectStore = useProjectStore()
+const router = useRouter()
 
 // Helper functions - using store functions
 const getStatusLabel = projectStore.getStatusLabel
@@ -42,6 +44,10 @@ const formatEstimatedTime = (hours, minutes) => {
   }
 }
 
+const navigateToProject = () => {
+  router.push(`/projects/${project.id}`)
+}
+
 const deleteProject = async (projectId) => {
   if (confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
     const result = await projectStore.deleteProject(projectId)
@@ -56,7 +62,11 @@ const deleteProject = async (projectId) => {
 <template>
 
   <div v-if="project" class="card shadow-sm border-0 mb-4 project-card">
-    <div class="card-body p-4">
+    <div 
+      class="card-body p-4 project-card-content"
+      @click="navigateToProject"
+      style="cursor: pointer;"
+    >
       <!-- Project Header -->
       <div class="d-flex justify-content-between align-items-start mb-4">
         <div class="flex-grow-1 me-3">
@@ -134,7 +144,7 @@ const deleteProject = async (projectId) => {
           View Project
         </router-link>
         <button
-            @click="deleteProject(project.id)"
+            @click.stop="deleteProject(project.id)"
             class="btn btn-outline-danger btn-sm"
         >
           Delete
@@ -169,6 +179,14 @@ const deleteProject = async (projectId) => {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
+.project-card-content {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.project-card-content:hover {
+  background-color: #c5e1c5 !important;
+}
+
 .h4 {
   font-size: 1.5rem;
   line-height: 1.2;
@@ -187,6 +205,28 @@ const deleteProject = async (projectId) => {
 .badge {
   font-weight: 500;
   font-size: 0.75rem;
+}
+
+/* Status Badge Styles */
+.status-planning,
+.status-on-hold {
+  background-color: rgba(255, 193, 7, 0.1) !important;
+  color: #ffc107 !important;
+}
+
+.status-active {
+  background-color: rgba(25, 135, 84, 0.1) !important;
+  color: #198754 !important;
+}
+
+.status-completed {
+  background-color: rgba(108, 117, 125, 0.2) !important;
+  color: #000000 !important;
+}
+
+.status-cancelled {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
 }
 
 @media (max-width: 767.98px) {

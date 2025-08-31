@@ -593,8 +593,8 @@ onMounted(() => {
 }
 
 .status-completed {
-  background-color: rgba(13, 110, 253, 0.1) !important;
-  color: #0d6efd !important;
+  background-color: rgba(108, 117, 125, 0.2) !important;
+  color: #000000 !important;
 }
 
 .status-cancelled {
