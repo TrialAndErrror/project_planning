@@ -15,7 +15,7 @@ class CustomLoginSerializer(LoginSerializer):
         password = attrs.get('password')
         
         if email and password:
-            user = authenticate(email=email, password=password)
+            user = authenticate(username=email, password=password)
             if not user:
                 raise serializers.ValidationError('Unable to log in with provided credentials.')
             if not user.is_active:

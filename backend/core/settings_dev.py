@@ -109,17 +109,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
 
-# CORS settings
+# CORS settings - Hardcoded for now to fix the error
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://0.0.0.0:3000",
 ]
 
+# Debug CORS configuration
+print(f"DEBUG: CORS_ALLOWED_ORIGINS = {CORS_ALLOWED_ORIGINS}")
+
 CORS_ALLOW_CREDENTIALS = True
 
-# Additional CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # For development only
+# Additional CORS settings for development
+CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=True, cast=bool)  # For development only
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -155,6 +158,7 @@ REST_FRAMEWORK = {
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
@@ -162,7 +166,7 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Disable email verification for development
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7  # Email confirmation expires in 7 days
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5  # Limit login attempts
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # 5 minutes timeout
@@ -190,6 +194,27 @@ REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'users.serializers.CustomUserDetailsSerializer',
     'LOGIN_SERIALIZER': 'users.serializers.CustomLoginSerializer',
     'REGISTER_SERIALIZER': 'users.serializers.CustomRegisterSerializer',
+}
+
+# Logging configuration for debugging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'corsheaders': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {

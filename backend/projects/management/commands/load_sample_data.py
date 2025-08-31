@@ -65,17 +65,19 @@ class Command(BaseCommand):
             
             self.stdout.write('✓ Existing data cleared')
 
-    def update_user_passwords(self, password):
-        """Update passwords for demo users"""
-        try:
-            demo_user = User.objects.get(email='demo@example.com')
-            demo_user.set_password(password)
-            demo_user.save()
-            
-            john_user = User.objects.get(email='john.doe@example.com')
-            john_user.set_password(password)
-            john_user.save()
-            
-            self.stdout.write('✓ User passwords updated')
-        except User.DoesNotExist:
-            self.stdout.write(self.style.WARNING('⚠ Demo users not found, skipping password update'))
+      def update_user_passwords(self, password):
+    """Update passwords for demo users"""
+    try:
+      demo_user = User.objects.get(email='demo@example.com')
+      demo_user.set_password(password)
+      demo_user.is_active = True
+      demo_user.save()
+      
+      john_user = User.objects.get(email='john.doe@example.com')
+      john_user.set_password(password)
+      john_user.is_active = True
+      john_user.save()
+      
+      self.stdout.write('✓ User passwords updated')
+    except User.DoesNotExist:
+      self.stdout.write(self.style.WARNING('⚠ Demo users not found, skipping password update'))
