@@ -284,7 +284,24 @@ const isOpen = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
+const resetForm = () => {
+  form.name = ''
+  form.description = ''
+  form.stage = ''
+  form.priority = 'medium'
+  form.status = 'not_started'
+  form.estimated_hours = 0
+  form.estimated_minutes = 0
+  form.timeline.planned_start_date = ''
+  form.timeline.planned_due_date = ''
+  form.project = props.projectId
+  showTaskDetails.value = false
+  showTimeline.value = false
+  Object.keys(errors).forEach(key => delete errors[key])
+}
+
 const handleClose = () => {
+  resetForm()
   emit('update:modelValue', false)
 }
 

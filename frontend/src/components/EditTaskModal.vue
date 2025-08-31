@@ -236,7 +236,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useProjectStore } from '../stores/project'
 import BaseModal from './BaseModal.vue'
 
@@ -284,7 +284,7 @@ const isOpen = computed({
 })
 
 // Initialize form with task data
-onMounted(() => {
+const initializeForm = () => {
   if (props.task) {
     form.name = props.task.name || ''
     form.description = props.task.description || ''
@@ -300,9 +300,31 @@ onMounted(() => {
       form.timeline.planned_due_date = props.task.timeline.planned_due_date || ''
     }
   }
-})
+}
+
+// Watch for changes to the task prop
+watch(() => props.task, initializeForm, { immediate: true })
+
+// Also initialize on mount as fallback
+onMounted(initializeForm)
+
+const resetForm = () => {
+  form.name = ''
+  form.description = ''
+  form.stage = ''
+  form.priority = 'medium'
+  form.status = 'not_started'
+  form.estimated_hours = 0
+  form.estimated_minutes = 0
+  form.timeline.planned_start_date = ''
+  form.timeline.planned_due_date = ''
+  showTaskDetails.value = false
+  showTimeline.value = false
+  Object.keys(errors).forEach(key => delete errors[key])
+}
 
 const handleClose = () => {
+  resetForm()
   emit('update:modelValue', false)
 }
 

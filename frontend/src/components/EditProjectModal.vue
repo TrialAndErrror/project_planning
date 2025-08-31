@@ -101,7 +101,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useProjectStore } from '../stores/project'
 import BaseModal from './BaseModal.vue'
 
@@ -135,15 +135,29 @@ const isOpen = computed({
 })
 
 // Initialize form with project data
-onMounted(() => {
+const initializeForm = () => {
   if (props.project) {
     form.name = props.project.name || ''
     form.description = props.project.description || ''
     form.status = props.project.status || 'planning'
   }
-})
+}
+
+// Watch for changes to the project prop
+watch(() => props.project, initializeForm, { immediate: true })
+
+// Also initialize on mount as fallback
+onMounted(initializeForm)
+
+const resetForm = () => {
+  form.name = ''
+  form.description = ''
+  form.status = 'planning'
+  Object.keys(errors).forEach(key => delete errors[key])
+}
 
 const handleClose = () => {
+  resetForm()
   emit('update:modelValue', false)
 }
 

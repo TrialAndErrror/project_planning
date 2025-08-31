@@ -113,7 +113,16 @@ const isOpen = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
+const resetForm = () => {
+  form.name = ''
+  form.description = ''
+  form.order = ''
+  form.project = props.projectId
+  Object.keys(errors).forEach(key => delete errors[key])
+}
+
 const handleClose = () => {
+  resetForm()
   emit('update:modelValue', false)
 }
 
