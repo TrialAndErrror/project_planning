@@ -231,43 +231,38 @@
 
       <!-- Edit Project Modal -->
       <EditProjectModal
-        v-if="showEditModal"
+        v-model="showEditModal"
         :project="project"
-        @close="showEditModal = false"
         @saved="handleProjectUpdated"
       />
 
       <!-- Add Stage Modal -->
       <AddStageModal
-        v-if="showAddStageModal"
+        v-model="showAddStageModal"
         :project-id="projectId"
-        @close="showAddStageModal = false"
         @saved="handleStageAdded"
       />
 
       <!-- Add Task Modal -->
       <AddTaskModal
-        v-if="showAddTaskModal"
+        v-model="showAddTaskModal"
         :project-id="projectId"
         :stages="project?.stages || []"
-        @close="showAddTaskModal = false"
         @saved="handleTaskAdded"
       />
 
       <!-- Edit Stage Modal -->
       <EditStageModal
-        v-if="showEditStageModal"
+        v-model="showEditStageModal"
         :stage="editingStage"
-        @close="showEditStageModal = false"
         @saved="handleStageUpdated"
       />
 
       <!-- Edit Task Modal -->
       <EditTaskModal
-        v-if="showEditTaskModal"
+        v-model="showEditTaskModal"
         :task="editingTask"
         :stages="project?.stages || []"
-        @close="showEditTaskModal = false"
         @saved="handleTaskUpdated"
       />
     </div>
