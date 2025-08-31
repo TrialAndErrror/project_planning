@@ -1,0 +1,609 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test123456$test123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "demo_user",
+      "first_name": "Demo",
+      "last_name": "User",
+      "email": "demo@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test123456$test123456",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "john_doe",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-10T09:00:00Z"
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 1,
+    "fields": {
+      "name": "Website Redesign",
+      "description": "Complete redesign of the company website with modern UI/UX, improved performance, and mobile responsiveness.",
+      "owner": 1,
+      "status": "active",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-20T14:30:00Z"
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 2,
+    "fields": {
+      "name": "Mobile App Development",
+      "description": "Develop a cross-platform mobile application for iOS and Android with real-time features and offline capabilities.",
+      "owner": 1,
+      "status": "planning",
+      "created_at": "2024-01-18T11:00:00Z",
+      "updated_at": "2024-01-18T11:00:00Z"
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 3,
+    "fields": {
+      "name": "Database Migration",
+      "description": "Migrate legacy database to new cloud-based solution with improved performance and scalability.",
+      "owner": 2,
+      "status": "in_progress",
+      "created_at": "2024-01-12T08:00:00Z",
+      "updated_at": "2024-01-19T16:45:00Z"
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 4,
+    "fields": {
+      "name": "Marketing Campaign",
+      "description": "Launch comprehensive marketing campaign for Q1 product release including social media, email, and content marketing.",
+      "owner": 1,
+      "status": "completed",
+      "created_at": "2024-01-05T09:00:00Z",
+      "updated_at": "2024-01-25T17:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 1,
+    "fields": {
+      "name": "Planning & Research",
+      "description": "Initial planning phase including requirements gathering, competitor analysis, and technical research.",
+      "project": 1,
+      "owner": 1,
+      "order": 1,
+      "status": "completed",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-17T15:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 2,
+    "fields": {
+      "name": "Design & Wireframing",
+      "description": "Create wireframes, mockups, and design system for the new website.",
+      "project": 1,
+      "owner": 1,
+      "order": 2,
+      "status": "completed",
+      "created_at": "2024-01-17T15:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 3,
+    "fields": {
+      "name": "Frontend Development",
+      "description": "Implement the frontend components and user interface using React and modern CSS.",
+      "project": 1,
+      "owner": 1,
+      "order": 3,
+      "status": "in_progress",
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-20T14:30:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 4,
+    "fields": {
+      "name": "Backend Development",
+      "description": "Develop API endpoints and server-side logic for the website functionality.",
+      "project": 1,
+      "owner": 1,
+      "order": 4,
+      "status": "not_started",
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 5,
+    "fields": {
+      "name": "Testing & QA",
+      "description": "Comprehensive testing including unit tests, integration tests, and user acceptance testing.",
+      "project": 1,
+      "owner": 1,
+      "order": 5,
+      "status": "not_started",
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 6,
+    "fields": {
+      "name": "Deployment",
+      "description": "Deploy the website to production environment and configure monitoring.",
+      "project": 1,
+      "owner": 1,
+      "order": 6,
+      "status": "not_started",
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 7,
+    "fields": {
+      "name": "Requirements Analysis",
+      "description": "Gather and analyze requirements for the mobile app including user stories and technical specifications.",
+      "project": 2,
+      "owner": 1,
+      "order": 1,
+      "status": "in_progress",
+      "created_at": "2024-01-18T11:00:00Z",
+      "updated_at": "2024-01-20T10:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 8,
+    "fields": {
+      "name": "Data Backup",
+      "description": "Create comprehensive backup of existing database before migration.",
+      "project": 3,
+      "owner": 2,
+      "order": 1,
+      "status": "completed",
+      "created_at": "2024-01-12T08:00:00Z",
+      "updated_at": "2024-01-13T16:00:00Z"
+    }
+  },
+  {
+    "model": "projects.stage",
+    "pk": 9,
+    "fields": {
+      "name": "Schema Migration",
+      "description": "Migrate database schema to new structure with data transformation.",
+      "project": 3,
+      "owner": 2,
+      "order": 2,
+      "status": "in_progress",
+      "created_at": "2024-01-13T16:00:00Z",
+      "updated_at": "2024-01-19T16:45:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 1,
+    "fields": {
+      "name": "Conduct User Research",
+      "description": "Interview potential users and analyze current website usage patterns to understand user needs and pain points.",
+      "project": 1,
+      "stage": 1,
+      "owner": 1,
+      "status": "completed",
+      "priority": "high",
+      "estimated_hours": 8,
+      "estimated_minutes": 0,
+      "actual_hours": 10,
+      "actual_minutes": 30,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-16T17:30:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 2,
+    "fields": {
+      "name": "Competitor Analysis",
+      "description": "Research and analyze competitor websites to identify best practices and opportunities for differentiation.",
+      "project": 1,
+      "stage": 1,
+      "owner": 1,
+      "status": "completed",
+      "priority": "medium",
+      "estimated_hours": 4,
+      "estimated_minutes": 0,
+      "actual_hours": 3,
+      "actual_minutes": 45,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-16T13:45:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 3,
+    "fields": {
+      "name": "Create Wireframes",
+      "description": "Design low-fidelity wireframes for all major pages and user flows.",
+      "project": 1,
+      "stage": 2,
+      "owner": 1,
+      "status": "completed",
+      "priority": "high",
+      "estimated_hours": 12,
+      "estimated_minutes": 0,
+      "actual_hours": 14,
+      "actual_minutes": 0,
+      "created_at": "2024-01-17T15:00:00Z",
+      "updated_at": "2024-01-18T17:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 4,
+    "fields": {
+      "name": "Design System Creation",
+      "description": "Create comprehensive design system with color palette, typography, and component library.",
+      "project": 1,
+      "stage": 2,
+      "owner": 1,
+      "status": "completed",
+      "priority": "high",
+      "estimated_hours": 16,
+      "estimated_minutes": 0,
+      "actual_hours": 18,
+      "actual_minutes": 30,
+      "created_at": "2024-01-17T15:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 5,
+    "fields": {
+      "name": "Homepage Component Development",
+      "description": "Implement the main homepage components including hero section, navigation, and footer.",
+      "project": 1,
+      "stage": 3,
+      "owner": 1,
+      "status": "in_progress",
+      "priority": "high",
+      "estimated_hours": 8,
+      "estimated_minutes": 0,
+      "actual_hours": 6,
+      "actual_minutes": 0,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-20T14:30:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 6,
+    "fields": {
+      "name": "Product Catalog Page",
+      "description": "Develop the product catalog page with filtering, sorting, and search functionality.",
+      "project": 1,
+      "stage": 3,
+      "owner": 1,
+      "status": "not_started",
+      "priority": "medium",
+      "estimated_hours": 12,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 7,
+    "fields": {
+      "name": "User Authentication System",
+      "description": "Implement user registration, login, and profile management functionality.",
+      "project": 1,
+      "stage": 4,
+      "owner": 1,
+      "status": "not_started",
+      "priority": "high",
+      "estimated_hours": 10,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 8,
+    "fields": {
+      "name": "API Development",
+      "description": "Create RESTful API endpoints for all website functionality including products, users, and orders.",
+      "project": 1,
+      "stage": 4,
+      "owner": 1,
+      "status": "not_started",
+      "priority": "high",
+      "estimated_hours": 20,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 9,
+    "fields": {
+      "name": "Unit Testing",
+      "description": "Write comprehensive unit tests for all components and API endpoints.",
+      "project": 1,
+      "stage": 5,
+      "owner": 1,
+      "status": "not_started",
+      "priority": "medium",
+      "estimated_hours": 8,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 10,
+    "fields": {
+      "name": "Integration Testing",
+      "description": "Perform end-to-end testing of all user flows and system integration.",
+      "project": 1,
+      "stage": 5,
+      "owner": 1,
+      "status": "not_started",
+      "priority": "high",
+      "estimated_hours": 6,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 11,
+    "fields": {
+      "name": "Production Deployment",
+      "description": "Deploy the website to production servers and configure load balancing.",
+      "project": 1,
+      "stage": 6,
+      "owner": 1,
+      "status": "not_started",
+      "priority": "high",
+      "estimated_hours": 4,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 12,
+    "fields": {
+      "name": "User Stories Documentation",
+      "description": "Document detailed user stories and acceptance criteria for the mobile app.",
+      "project": 2,
+      "stage": 7,
+      "owner": 1,
+      "status": "in_progress",
+      "priority": "high",
+      "estimated_hours": 6,
+      "estimated_minutes": 0,
+      "actual_hours": 4,
+      "actual_minutes": 0,
+      "created_at": "2024-01-18T11:00:00Z",
+      "updated_at": "2024-01-20T10:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 13,
+    "fields": {
+      "name": "Technical Architecture Design",
+      "description": "Design the technical architecture for the mobile app including backend services and database design.",
+      "project": 2,
+      "stage": 7,
+      "owner": 1,
+      "status": "not_started",
+      "priority": "high",
+      "estimated_hours": 8,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-18T11:00:00Z",
+      "updated_at": "2024-01-18T11:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 14,
+    "fields": {
+      "name": "Full Database Backup",
+      "description": "Create a complete backup of all database tables, indexes, and stored procedures.",
+      "project": 3,
+      "stage": 8,
+      "owner": 2,
+      "status": "completed",
+      "priority": "urgent",
+      "estimated_hours": 2,
+      "estimated_minutes": 0,
+      "actual_hours": 1,
+      "actual_minutes": 45,
+      "created_at": "2024-01-12T08:00:00Z",
+      "updated_at": "2024-01-13T16:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 15,
+    "fields": {
+      "name": "Schema Migration Scripts",
+      "description": "Create automated scripts to migrate the database schema from old structure to new structure.",
+      "project": 3,
+      "stage": 9,
+      "owner": 2,
+      "status": "in_progress",
+      "priority": "high",
+      "estimated_hours": 16,
+      "estimated_minutes": 0,
+      "actual_hours": 12,
+      "actual_minutes": 0,
+      "created_at": "2024-01-13T16:00:00Z",
+      "updated_at": "2024-01-19T16:45:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 16,
+    "fields": {
+      "name": "Data Validation",
+      "description": "Validate migrated data integrity and run consistency checks.",
+      "project": 3,
+      "stage": 9,
+      "owner": 2,
+      "status": "not_started",
+      "priority": "high",
+      "estimated_hours": 4,
+      "estimated_minutes": 0,
+      "actual_hours": 0,
+      "actual_minutes": 0,
+      "created_at": "2024-01-13T16:00:00Z",
+      "updated_at": "2024-01-13T16:00:00Z"
+    }
+  },
+  {
+    "model": "projects.task",
+    "pk": 17,
+    "fields": {
+      "name": "General Website Maintenance",
+      "description": "Regular maintenance tasks including security updates, performance optimization, and bug fixes.",
+      "project": 1,
+      "stage": null,
+      "owner": 1,
+      "status": "in_progress",
+      "priority": "medium",
+      "estimated_hours": 2,
+      "estimated_minutes": 0,
+      "actual_hours": 1,
+      "actual_minutes": 30,
+      "created_at": "2024-01-20T09:00:00Z",
+      "updated_at": "2024-01-20T10:30:00Z"
+    }
+  },
+  {
+    "model": "projects.tasktimeline",
+    "pk": 1,
+    "fields": {
+      "task": 1,
+      "planned_start_date": "2024-01-15T10:00:00Z",
+      "planned_due_date": "2024-01-16T18:00:00Z",
+      "actual_start_date": "2024-01-15T10:00:00Z",
+      "actual_completion_date": "2024-01-16T17:30:00Z",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-16T17:30:00Z"
+    }
+  },
+  {
+    "model": "projects.tasktimeline",
+    "pk": 2,
+    "fields": {
+      "task": 5,
+      "planned_start_date": "2024-01-19T12:00:00Z",
+      "planned_due_date": "2024-01-21T18:00:00Z",
+      "actual_start_date": "2024-01-19T12:00:00Z",
+      "actual_completion_date": null,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-20T14:30:00Z"
+    }
+  },
+  {
+    "model": "projects.tasktimeline",
+    "pk": 3,
+    "fields": {
+      "task": 6,
+      "planned_start_date": "2024-01-22T09:00:00Z",
+      "planned_due_date": "2024-01-25T18:00:00Z",
+      "actual_start_date": null,
+      "actual_completion_date": null,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.tasktimeline",
+    "pk": 4,
+    "fields": {
+      "task": 7,
+      "planned_start_date": "2024-01-26T09:00:00Z",
+      "planned_due_date": "2024-01-30T18:00:00Z",
+      "actual_start_date": null,
+      "actual_completion_date": null,
+      "created_at": "2024-01-19T12:00:00Z",
+      "updated_at": "2024-01-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "projects.tasktimeline",
+    "pk": 5,
+    "fields": {
+      "task": 12,
+      "planned_start_date": "2024-01-18T11:00:00Z",
+      "planned_due_date": "2024-01-22T18:00:00Z",
+      "actual_start_date": "2024-01-18T11:00:00Z",
+      "actual_completion_date": null,
+      "created_at": "2024-01-18T11:00:00Z",
+      "updated_at": "2024-01-20T10:00:00Z"
+    }
+  },
+  {
+    "model": "projects.tasktimeline",
+    "pk": 6,
+    "fields": {
+      "task": 15,
+      "planned_start_date": "2024-01-13T16:00:00Z",
+      "planned_due_date": "2024-01-20T18:00:00Z",
+      "actual_start_date": "2024-01-13T16:00:00Z",
+      "actual_completion_date": null,
+      "created_at": "2024-01-13T16:00:00Z",
+      "updated_at": "2024-01-19T16:45:00Z"
+    }
+  }
+]
