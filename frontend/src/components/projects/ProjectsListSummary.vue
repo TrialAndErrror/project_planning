@@ -23,11 +23,14 @@ const totalEstimatedTime = computed(() => {
   let totalMinutes = 0
 
   projects.value.forEach(project => {
-    if (project.total_estimated_hours) {
-      totalHours += project.total_estimated_hours
-    }
-    if (project.total_estimated_minutes) {
-      totalMinutes += project.total_estimated_minutes
+    // Only include incomplete projects
+    if (project.status !== 'completed') {
+      if (project.total_estimated_hours) {
+        totalHours += project.total_estimated_hours
+      }
+      if (project.total_estimated_minutes) {
+        totalMinutes += project.total_estimated_minutes
+      }
     }
   })
 
@@ -76,7 +79,7 @@ const totalEstimatedTime = computed(() => {
         <div class="col-6 col-md-3">
           <div class="text-center">
             <div class="h3 fw-bold text-info mb-1">{{ totalEstimatedTime }}</div>
-            <div class="small text-muted">Est. Time Remaining</div>
+            <div class="small text-muted">Est. Time (Incomplete)</div>
           </div>
         </div>
       </div>

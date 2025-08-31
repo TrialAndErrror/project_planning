@@ -136,15 +136,29 @@ const isOpen = computed({
 
 // Initialize form with project data
 const initializeForm = () => {
+  console.log('EditProjectModal - initializeForm called with project:', props.project)
   if (props.project) {
     form.name = props.project.name || ''
     form.description = props.project.description || ''
     form.status = props.project.status || 'planning'
+    console.log('EditProjectModal - form initialized:', form)
   }
 }
 
 // Watch for changes to the project prop
 watch(() => props.project, initializeForm, { immediate: true })
+
+// Watch for modal opening/closing
+watch(() => props.modelValue, (newValue) => {
+  console.log('EditProjectModal - modal value changed:', newValue)
+  if (newValue) {
+    console.log('EditProjectModal - modal opening, project:', props.project)
+    initializeForm()
+  } else {
+    console.log('EditProjectModal - modal closing, resetting form')
+    resetForm()
+  }
+})
 
 // Also initialize on mount as fallback
 onMounted(initializeForm)
@@ -157,7 +171,6 @@ const resetForm = () => {
 }
 
 const handleClose = () => {
-  resetForm()
   emit('update:modelValue', false)
 }
 

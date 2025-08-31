@@ -186,15 +186,23 @@ class ProjectSerializer(serializers.ModelSerializer):
         return round((completed_tasks / total_tasks) * 100, 1)
     
     def get_total_estimated_hours(self, obj):
-        """Calculate total estimated hours for all tasks in this project"""
-        total_hours = obj.tasks.aggregate(
+        """Calculate total estimated hours for incomplete tasks in this project"""
+        # Only include incomplete tasks from incomplete projects
+        if obj.status == 'completed':
+            return 0
+        
+        total_hours = obj.tasks.filter(status__in=['not_started', 'in_progress', 'review', 'blocked']).aggregate(
             total=models.Sum('estimated_hours')
         )['total'] or 0
         return total_hours
     
     def get_total_estimated_minutes(self, obj):
-        """Calculate total estimated minutes for all tasks in this project"""
-        total_minutes = obj.tasks.aggregate(
+        """Calculate total estimated minutes for incomplete tasks in this project"""
+        # Only include incomplete tasks from incomplete projects
+        if obj.status == 'completed':
+            return 0
+        
+        total_minutes = obj.tasks.filter(status__in=['not_started', 'in_progress', 'review', 'blocked']).aggregate(
             total=models.Sum('estimated_minutes')
         )['total'] or 0
         return total_minutes

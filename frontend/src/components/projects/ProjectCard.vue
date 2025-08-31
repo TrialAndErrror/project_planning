@@ -1,5 +1,5 @@
 <script setup>
-import { useProjectStore } from '../../stores/project.js'
+import {useProjectStore} from '../../stores/project.js'
 
 // Define props
 const {project} = defineProps({
@@ -11,28 +11,9 @@ const {project} = defineProps({
 
 const projectStore = useProjectStore()
 
-// Helper functions
-const getStatusLabel = (status) => {
-  const labels = {
-    planning: 'Planning',
-    active: 'Active',
-    on_hold: 'On Hold',
-    completed: 'Completed',
-    cancelled: 'Cancelled'
-  }
-  return labels[status] || status
-}
-
-const getStatusClasses = (status) => {
-  const classes = {
-    planning: 'bg-warning bg-opacity-10 text-warning',
-    active: 'bg-success bg-opacity-10 text-success',
-    on_hold: 'bg-warning bg-opacity-10 text-warning',
-    completed: 'bg-primary bg-opacity-10 text-primary',
-    cancelled: 'bg-danger bg-opacity-10 text-danger'
-  }
-  return classes[status] || 'bg-secondary bg-opacity-10 text-secondary'
-}
+// Helper functions - using store functions
+const getStatusLabel = projectStore.getStatusLabel
+const getStatusClasses = projectStore.getStatusBadgeClasses
 
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A'
@@ -73,6 +54,7 @@ const deleteProject = async (projectId) => {
 </script>
 
 <template>
+
   <div v-if="project" class="card shadow-sm border-0 mb-4 project-card">
     <div class="card-body p-4">
       <!-- Project Header -->
@@ -133,12 +115,12 @@ const deleteProject = async (projectId) => {
         </div>
         <div class="progress" style="height: 8px;">
           <div
-            class="progress-bar bg-primary"
-            :style="{ width: `${project.progress_percentage || 0}%` }"
-            role="progressbar"
-            :aria-valuenow="project.progress_percentage || 0"
-            aria-valuemin="0"
-            aria-valuemax="100"
+              class="progress-bar bg-primary"
+              :style="{ width: `${project.progress_percentage || 0}%` }"
+              role="progressbar"
+              :aria-valuenow="project.progress_percentage || 0"
+              aria-valuemin="0"
+              aria-valuemax="100"
           ></div>
         </div>
       </div>
@@ -146,21 +128,21 @@ const deleteProject = async (projectId) => {
       <!-- Project Actions -->
       <div class="d-flex justify-content-end gap-2 pt-3 border-top">
         <router-link
-          :to="`/projects/${project.id}`"
-          class="btn btn-primary btn-sm"
+            :to="`/projects/${project.id}`"
+            class="btn btn-primary btn-sm"
         >
           View Project
         </router-link>
         <button
-          @click="deleteProject(project.id)"
-          class="btn btn-outline-danger btn-sm"
+            @click="deleteProject(project.id)"
+            class="btn btn-outline-danger btn-sm"
         >
           Delete
         </button>
       </div>
     </div>
   </div>
-  
+
   <!-- Loading/Error State -->
   <div v-else class="card shadow-sm border-0 mb-4">
     <div class="card-body p-4">
@@ -211,16 +193,16 @@ const deleteProject = async (projectId) => {
   .h4 {
     font-size: 1.25rem;
   }
-  
+
   .card-body {
     padding: 1rem !important;
   }
-  
+
   .d-flex.justify-content-between.align-items-start {
     flex-direction: column;
     align-items: flex-start !important;
   }
-  
+
   .d-flex.flex-column.align-items-end {
     align-items: flex-start !important;
     margin-top: 1rem;

@@ -104,28 +104,32 @@
             </div>
 
             <!-- Stages and Tasks Tree -->
-            <div class="space-y-3">
+            <div class="space-y-3" style="gap: 1rem;">
               <!-- Stages -->
               <div v-for="stage in project.stages" :key="stage.id" class="card border">
-                <div class="card-header bg-light py-3">
+                <div 
+                  class="card-header bg-light py-3 stage-header" 
+                  @click="toggleStage(stage.id)"
+                >
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-3">
-                      <i class="bi bi-folder text-muted"></i>
+                      <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-folder2-open' : 'bi-folder'"></i>
                       <span class="fw-semibold text-dark">{{ stage.name }}</span>
                       <span class="badge rounded-pill" :class="getStatusBadgeClasses(stage.status)">
                         {{ getStatusLabel(stage.status) }}
                       </span>
+                      <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                       <small class="text-muted">{{ stage.task_count }} tasks</small>
                       <button
-                        @click="editStage(stage)"
+                        @click.stop="editStage(stage)"
                         class="btn btn-outline-primary btn-sm"
                       >
                         <i class="bi bi-pencil"></i>
                       </button>
                       <button
-                        @click="deleteStage(stage.id)"
+                        @click.stop="deleteStage(stage.id)"
                         class="btn btn-outline-danger btn-sm"
                       >
                         <i class="bi bi-trash"></i>
@@ -135,9 +139,13 @@
                 </div>
 
                 <!-- Tasks in this stage -->
-                <div class="card-body pt-0">
-                  <div v-for="task in getTasksForStage(stage.id)" :key="task.id" class="border-start border-2 border-light ps-3 ms-2 mb-3">
-                    <div class="d-flex justify-content-between align-items-center py-2">
+                <div v-show="isStageExpanded(stage.id)" class="card-body pt-0">
+                  <div v-for="task in getTasksForStage(stage.id)" :key="task.id" class="task-item">
+                    <!-- Task Header -->
+                    <div 
+                      class="d-flex justify-content-between align-items-center py-2 task-header"
+                      @click="toggleTask(task.id)"
+                    >
                       <div class="d-flex align-items-center gap-3">
                         <i class="bi bi-check2-square text-muted"></i>
                         <span class="text-dark">{{ task.name }}</span>
@@ -150,25 +158,37 @@
                       </div>
                       <div class="d-flex align-items-center gap-2">
                         <small class="text-muted">{{ task.estimated_time_formatted }}</small>
+                        <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                      </div>
+                    </div>
+                    
+                    <!-- Task Details (Expandable) -->
+                    <div v-show="isTaskExpanded(task.id)" class="mt-3 task-details">
+                      <!-- Task Description -->
+                      <div v-if="task.description" class="mb-3">
+                        <p class="text-muted mb-0">{{ task.description }}</p>
+                      </div>
+                      
+                      <!-- Task Action Buttons -->
+                      <div class="d-flex gap-2 mt-3">
                         <button
                           v-if="task.status !== 'completed'"
                           @click="completeTask(task.id)"
-                          class="btn btn-outline-success btn-sm"
-                          title="Mark as complete"
+                          class="btn btn-success btn-sm"
                         >
-                          <i class="bi bi-check-lg"></i>
+                          <i class="bi bi-check-lg me-1"></i>Mark Completed
                         </button>
                         <button
                           @click="editTask(task)"
-                          class="btn btn-outline-primary btn-sm"
+                          class="btn btn-primary btn-sm"
                         >
-                          <i class="bi bi-pencil"></i>
+                          <i class="bi bi-pencil me-1"></i>Edit
                         </button>
                         <button
                           @click="deleteTask(task.id)"
-                          class="btn btn-outline-danger btn-sm"
+                          class="btn btn-danger btn-sm"
                         >
-                          <i class="bi bi-trash"></i>
+                          <i class="bi bi-trash me-1"></i>Delete
                         </button>
                       </div>
                     </div>
@@ -178,15 +198,23 @@
 
               <!-- Tasks without stage -->
               <div v-if="getTasksWithoutStage().length > 0" class="card border">
-                <div class="card-header bg-light py-3">
+                <div 
+                  class="card-header bg-light py-3 stage-header"
+                  @click="toggleStage('general')"
+                >
                   <div class="d-flex align-items-center gap-3">
-                    <i class="bi bi-list-task text-muted"></i>
+                    <i class="bi" :class="isStageExpanded('general') ? 'bi-list-task' : 'bi-list'"></i>
                     <span class="fw-semibold text-dark">General Tasks</span>
+                    <i class="bi" :class="isStageExpanded('general') ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                   </div>
                 </div>
-                <div class="card-body pt-0">
-                  <div v-for="task in getTasksWithoutStage()" :key="task.id" class="border-start border-2 border-light ps-3 ms-2 mb-3">
-                    <div class="d-flex justify-content-between align-items-center py-2">
+                <div v-show="isStageExpanded('general')" class="card-body pt-0">
+                  <div v-for="task in getTasksWithoutStage()" :key="task.id" class="task-item">
+                    <!-- Task Header -->
+                    <div 
+                      class="d-flex justify-content-between align-items-center py-2 task-header"
+                      @click="toggleTask(task.id)"
+                    >
                       <div class="d-flex align-items-center gap-3">
                         <i class="bi bi-check2-square text-muted"></i>
                         <span class="text-dark">{{ task.name }}</span>
@@ -199,25 +227,37 @@
                       </div>
                       <div class="d-flex align-items-center gap-2">
                         <small class="text-muted">{{ task.estimated_time_formatted }}</small>
+                        <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                      </div>
+                    </div>
+                    
+                    <!-- Task Details (Expandable) -->
+                    <div v-show="isTaskExpanded(task.id)" class="mt-3 task-details">
+                      <!-- Task Description -->
+                      <div v-if="task.description" class="mb-3">
+                        <p class="text-muted mb-0">{{ task.description }}</p>
+                      </div>
+                      
+                      <!-- Task Action Buttons -->
+                      <div class="d-flex gap-2 mt-3 justify-content-end">
                         <button
                           v-if="task.status !== 'completed'"
                           @click="completeTask(task.id)"
-                          class="btn btn-outline-success btn-sm"
-                          title="Mark as complete"
+                          class="btn btn-success btn-sm me-auto"
                         >
-                          <i class="bi bi-check-lg"></i>
+                          <i class="bi bi-check-lg me-1"></i>Mark Completed
                         </button>
                         <button
                           @click="editTask(task)"
-                          class="btn btn-outline-primary btn-sm"
+                          class="btn btn-primary btn-sm"
                         >
-                          <i class="bi bi-pencil"></i>
+                          <i class="bi bi-pencil me-1"></i>Edit
                         </button>
                         <button
                           @click="deleteTask(task.id)"
-                          class="btn btn-outline-danger btn-sm"
+                          class="btn btn-danger btn-sm"
                         >
-                          <i class="bi bi-trash"></i>
+                          <i class="bi bi-trash me-1"></i>Delete
                         </button>
                       </div>
                     </div>
@@ -300,17 +340,7 @@ const editingStage = ref(null)
 const editingTask = ref(null)
 
 // Status classes
-const statusClasses = computed(() => {
-  if (!project.value) return ''
-  const status = project.value.status
-  return {
-    'bg-warning bg-opacity-10 text-warning': status === 'planning',
-    'bg-success bg-opacity-10 text-success': status === 'active',
-    'bg-warning bg-opacity-10 text-warning': status === 'on_hold',
-    'bg-primary bg-opacity-10 text-primary': status === 'completed',
-    'bg-danger bg-opacity-10 text-danger': status === 'cancelled'
-  }
-})
+const statusClasses = computed(() => projectStore.projectStatusClasses)
 
 // Load project data
 const loadProject = async () => {
@@ -320,56 +350,18 @@ const loadProject = async () => {
   }
 }
 
-// Helper functions
-const getStatusLabel = (status) => {
-  const labels = {
-    planning: 'Planning',
-    active: 'Active',
-    on_hold: 'On Hold',
-    completed: 'Completed',
-    cancelled: 'Cancelled',
-    not_started: 'Not Started',
-    in_progress: 'In Progress',
-    review: 'In Review',
-    blocked: 'Blocked'
-  }
-  return labels[status] || status
-}
+// Helper functions - now using store functions
+const getStatusLabel = projectStore.getStatusLabel
+const getStatusBadgeClasses = projectStore.getStatusBadgeClasses
+const getPriorityBadgeClasses = projectStore.getPriorityBadgeClasses
+const getTasksForStage = projectStore.getTasksForStage
+const getTasksWithoutStage = projectStore.getTasksWithoutStage
 
-const getStatusBadgeClasses = (status) => {
-  const classes = {
-    planning: 'bg-warning bg-opacity-10 text-warning',
-    active: 'bg-success bg-opacity-10 text-success',
-    on_hold: 'bg-warning bg-opacity-10 text-warning',
-    completed: 'bg-primary bg-opacity-10 text-primary',
-    cancelled: 'bg-danger bg-opacity-10 text-danger',
-    not_started: 'bg-secondary bg-opacity-10 text-secondary',
-    in_progress: 'bg-primary bg-opacity-10 text-primary',
-    review: 'bg-info bg-opacity-10 text-info',
-    blocked: 'bg-danger bg-opacity-10 text-danger'
-  }
-  return classes[status] || 'bg-secondary bg-opacity-10 text-secondary'
-}
-
-const getPriorityBadgeClasses = (priority) => {
-  const classes = {
-    low: 'bg-secondary bg-opacity-10 text-secondary',
-    medium: 'bg-warning bg-opacity-10 text-warning',
-    high: 'bg-warning bg-opacity-10 text-warning',
-    urgent: 'bg-danger bg-opacity-10 text-danger'
-  }
-  return classes[priority] || 'bg-secondary bg-opacity-10 text-secondary'
-}
-
-const getTasksForStage = (stageId) => {
-  if (!project.value) return []
-  return project.value.tasks.filter(task => task.stage === stageId)
-}
-
-const getTasksWithoutStage = () => {
-  if (!project.value) return []
-  return project.value.tasks.filter(task => !task.stage)
-}
+// Toggle methods - now using store functions
+const toggleStage = projectStore.toggleStage
+const toggleTask = projectStore.toggleTask
+const isStageExpanded = projectStore.isStageExpanded
+const isTaskExpanded = projectStore.isTaskExpanded
 
 // Event handlers
 const handleProjectUpdated = () => {
@@ -459,12 +451,83 @@ onMounted(() => {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
 }
 
+.card-header {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.card-header:hover {
+  background-color: #e9ecef !important;
+}
+
 .border-start {
   border-left: 2px solid #dee2e6 !important;
 }
 
 .space-y-3 > * + * {
   margin-top: 1rem;
+}
+
+/* Task expansion animations */
+.task-details {
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+.task-details-enter-active,
+.task-details-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.task-details-enter-from,
+.task-details-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Button hover effects */
+.btn-sm {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Stage header cursor and hover effects */
+.stage-header {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.stage-header:hover {
+  background-color: #e9ecef !important;
+}
+
+/* Task item styling */
+.task-item {
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  border-left: 2px solid transparent;
+}
+
+.task-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(2px);
+  border-left-color: #dee2e6;
+  padding-left: 1rem;
+}
+
+/* Task header styling */
+.task-header {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: -0.5rem;
 }
 
 @media (max-width: 767.98px) {
@@ -485,5 +548,94 @@ onMounted(() => {
   .btn {
     width: 100%;
   }
+  
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+  
+  .d-flex.gap-2 .btn {
+    width: 100%;
+  }
+}
+
+/* Status and Priority Badge Base Styles */
+.status-planning,
+.status-on-hold,
+.status-active,
+.status-completed,
+.status-cancelled,
+.status-not-started,
+.status-in-progress,
+.status-review,
+.status-blocked,
+.priority-low,
+.priority-medium,
+.priority-high,
+.priority-urgent {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* Status Colors */
+.status-planning,
+.status-on-hold {
+  background-color: rgba(255, 193, 7, 0.1) !important;
+  color: #ffc107 !important;
+}
+
+.status-active {
+  background-color: rgba(25, 135, 84, 0.1) !important;
+  color: #198754 !important;
+}
+
+.status-completed {
+  background-color: rgba(13, 110, 253, 0.1) !important;
+  color: #0d6efd !important;
+}
+
+.status-cancelled {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
+}
+
+.status-not-started {
+  background-color: rgba(108, 117, 125, 0.1) !important;
+  color: #6c757d !important;
+}
+
+.status-in-progress {
+  background-color: rgba(13, 110, 253, 0.1) !important;
+  color: #0d6efd !important;
+}
+
+.status-review {
+  background-color: rgba(13, 202, 240, 0.1) !important;
+  color: #0dcaf0 !important;
+}
+
+.status-blocked {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
+}
+
+/* Priority Colors */
+.priority-low {
+  background-color: rgba(108, 117, 125, 0.1) !important;
+  color: #6c757d !important;
+}
+
+.priority-medium,
+.priority-high {
+  background-color: rgba(255, 193, 7, 0.1) !important;
+  color: #ffc107 !important;
+}
+
+.priority-urgent {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
 }
 </style> 

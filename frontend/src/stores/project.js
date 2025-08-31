@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -17,6 +17,10 @@ export const useProjectStore = defineStore('project', () => {
   const currentProject = ref(null)
   const loading = ref(false)
   const error = ref(null)
+  
+  // UI State for expandable sections
+  const expandedStages = ref(new Set())
+  const expandedTasks = ref(new Set())
 
   // Set auth token in axios headers dynamically
   const setAuthToken = () => {
@@ -319,12 +323,70 @@ export const useProjectStore = defineStore('project', () => {
     error.value = null
   }
 
+  // Helper functions
+  const getStatusLabel = (status) => {
+    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  }
+
+  const getStatusBadgeClasses = (status) => {
+    return `status-${status.replace('_', '-')}`
+  }
+
+  const getPriorityBadgeClasses = (priority) => {
+    return `priority-${priority}`
+  }
+
+  // Task filtering functions
+  const getTasksForStage = (stageId) => {
+    if (!currentProject.value) return []
+    return currentProject.value.tasks.filter(task => task.stage === stageId)
+  }
+
+  const getTasksWithoutStage = () => {
+    if (!currentProject.value) return []
+    return currentProject.value.tasks.filter(task => !task.stage)
+  }
+
+  // Toggle methods for expandable sections
+  const toggleStage = (stageId) => {
+    if (expandedStages.value.has(stageId)) {
+      expandedStages.value.delete(stageId)
+    } else {
+      expandedStages.value.add(stageId)
+    }
+  }
+
+  const toggleTask = (taskId) => {
+    if (expandedTasks.value.has(taskId)) {
+      expandedTasks.value.delete(taskId)
+    } else {
+      expandedTasks.value.add(taskId)
+    }
+  }
+
+  const isStageExpanded = (stageId) => {
+    return expandedStages.value.has(stageId)
+  }
+
+  const isTaskExpanded = (taskId) => {
+    return expandedTasks.value.has(taskId)
+  }
+
+  // Computed properties
+  const projectStatusClasses = computed(() => {
+    if (!currentProject.value) return ''
+    const status = currentProject.value.status
+    return `status-${status.replace('_', '-')}`
+  })
+
   return {
     // State
     projects,
     currentProject,
     loading,
     error,
+    expandedStages,
+    expandedTasks,
     
     // Actions
     fetchProjects,
@@ -342,6 +404,22 @@ export const useProjectStore = defineStore('project', () => {
     completeTask,
     addTimeToTask,
     clearCurrentProject,
-    clearError
+    clearError,
+    
+    // Helper functions
+    getStatusLabel,
+    getStatusBadgeClasses,
+    getPriorityBadgeClasses,
+    getTasksForStage,
+    getTasksWithoutStage,
+    
+    // UI State management
+    toggleStage,
+    toggleTask,
+    isStageExpanded,
+    isTaskExpanded,
+    
+    // Computed properties
+    projectStatusClasses
   }
 }) 
