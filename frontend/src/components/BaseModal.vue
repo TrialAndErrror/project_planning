@@ -1,50 +1,48 @@
 <template>
-  <Transition name="modal-backdrop" appear>
-    <div 
-      v-if="modelValue"
-      class="fixed inset-0 z-50 overflow-y-auto"
-      @click="handleBackdropClick"
-    >
-      <!-- Backdrop -->
-      <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
-      
-      <!-- Modal Container -->
-      <div class="flex min-h-full items-center justify-center p-4">
-        <Transition name="modal-content" appear>
+  <Teleport to="body">
+    <Transition name="modal-backdrop" appear>
+      <div 
+        v-if="modelValue"
+        class="modal fade show d-block"
+        tabindex="-1"
+        @click="handleBackdropClick"
+      >
+        <!-- Backdrop -->
+        <div class="modal-backdrop fade show" style="z-index: 1050;"></div>
+        
+        <!-- Modal Container -->
+        <div class="modal-dialog modal-dialog-centered" style="z-index: 1055;">
           <div 
-            class="relative w-full max-w-md transform overflow-hidden rounded-lg bg-white shadow-xl transition-all"
+            class="modal-content"
             @click.stop
           >
             <!-- Modal Header -->
-            <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-              <h3 class="text-lg font-semibold text-gray-900">
+            <div class="modal-header">
+              <h5 class="modal-title">
                 <slot name="header"></slot>
-              </h3>
+              </h5>
               <button
                 @click="$emit('update:modelValue', false)"
-                class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-              >
-                <span class="sr-only">Close</span>
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+                class="btn-close"
+                type="button"
+                aria-label="Close"
+              ></button>
             </div>
 
             <!-- Modal Body -->
-            <div class="px-6 py-4">
+            <div class="modal-body">
               <slot></slot>
             </div>
 
             <!-- Modal Footer -->
-            <div v-if="$slots.footer" class="flex items-center justify-end space-x-3 border-t border-gray-200 px-6 py-4 bg-gray-50">
+            <div v-if="$slots.footer" class="modal-footer">
               <slot name="footer"></slot>
             </div>
           </div>
-        </Transition>
+        </div>
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup>
@@ -79,9 +77,9 @@ const handleEscape = (event) => {
 // Prevent body scroll when modal is open
 const preventBodyScroll = () => {
   if (props.modelValue) {
-    document.body.style.overflow = 'hidden'
+    document.body.classList.add('modal-open')
   } else {
-    document.body.style.overflow = ''
+    document.body.classList.remove('modal-open')
   }
 }
 
@@ -92,7 +90,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscape)
-  document.body.style.overflow = ''
+  document.body.classList.remove('modal-open')
 })
 
 // Watch for modelValue changes to handle body scroll
@@ -101,7 +99,7 @@ watch(() => props.modelValue, preventBodyScroll)
 </script>
 
 <style scoped>
-/* Modal backdrop transition */
+/* Custom modal transitions to work with Bootstrap */
 .modal-backdrop-enter-active,
 .modal-backdrop-leave-active {
   transition: opacity 0.3s ease;
@@ -112,19 +110,45 @@ watch(() => props.modelValue, preventBodyScroll)
   opacity: 0;
 }
 
-/* Modal content transition */
-.modal-content-enter-active,
-.modal-content-leave-active {
-  transition: all 0.3s ease;
+/* Ensure proper z-index hierarchy */
+.modal {
+  z-index: 1055 !important;
 }
 
-.modal-content-enter-from {
-  opacity: 0;
-  transform: scale(0.9) translateY(-20px);
+.modal-backdrop {
+  z-index: 1050 !important;
 }
 
-.modal-content-leave-to {
-  opacity: 0;
-  transform: scale(0.9) translateY(-20px);
+.modal-dialog {
+  z-index: 1055 !important;
+  position: relative;
+}
+
+.modal-content {
+  position: relative;
+  z-index: 1056 !important;
+}
+
+/* Custom modal sizes if needed */
+.modal-dialog {
+  max-width: 500px;
+}
+
+@media (min-width: 768px) {
+  .modal-dialog {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-dialog {
+    max-width: 700px;
+  }
+}
+
+/* Prevent body scroll when modal is open */
+:global(body.modal-open) {
+  overflow: hidden;
+  padding-right: 0;
 }
 </style>
