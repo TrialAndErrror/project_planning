@@ -13,11 +13,16 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Stage)
 class StageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'project', 'owner', 'order', 'status', 'created_at']
-    list_filter = ['status', 'project', 'created_at', 'owner']
+    list_display = ['name', 'project', 'owner', 'order', 'calculated_status', 'created_at']
+    list_filter = ['project', 'created_at', 'owner']
     search_fields = ['name', 'description', 'project__name']
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at', 'calculated_status']
     ordering = ['project', 'order']
+    
+    def calculated_status(self, obj):
+        """Display the calculated status in the admin"""
+        return obj.calculated_status
+    calculated_status.short_description = 'Status'
 
 
 @admin.register(Task)

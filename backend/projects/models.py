@@ -42,20 +42,46 @@ class Stage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Stage status
-    STATUS_CHOICES = [
-        ('not_started', 'Not Started'),
-        ('in_progress', 'In Progress'),
-        ('completed', 'Completed'),
-    ]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_started')
-    
     class Meta:
         ordering = ['project', 'order', 'created_at']
         unique_together = ['project', 'order']
     
     def __str__(self):
         return f"{self.project.name} - {self.name}"
+    
+    @property
+    def calculated_status(self):
+        """
+        Calculate stage status based on the status of tasks within this stage.
+        
+        Rules:
+        - If no tasks: "Not Started"
+        - If all tasks are "Not Started": "Not Started" 
+        - If at least one task is "In Progress" or further: "In Progress"
+        - If all tasks are "Completed": "Completed"
+        """
+        tasks = self.tasks.all()
+        
+        if not tasks.exists():
+            return 'not_started'
+        
+        # Get all task statuses
+        task_statuses = list(tasks.values_list('status', flat=True))
+        
+        # If all tasks are completed
+        if all(status == 'completed' for status in task_statuses):
+            return 'completed'
+        
+        # If at least one task is in progress or further (not just not_started)
+        if any(status in ['in_progress', 'review', 'completed', 'blocked'] for status in task_statuses):
+            return 'in_progress'
+        
+        # If all tasks are not started
+        if all(status == 'not_started' for status in task_statuses):
+            return 'not_started'
+        
+        # Default fallback
+        return 'in_progress'
 
 
 class Task(models.Model):

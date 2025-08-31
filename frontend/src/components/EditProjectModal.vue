@@ -4,58 +4,72 @@
       Edit Project
     </template>
 
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+    <form @submit.prevent="handleSubmit">
       <!-- Project Name -->
-      <div>
-        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-          Project Name *
-        </label>
-        <input
-          id="name"
-          v-model="form.name"
-          type="text"
-          required
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-          :class="{ 'border-red-500': errors.name }"
-        />
-        <p v-if="errors.name" class="mt-1 text-sm text-red-600">
-          {{ errors.name }}
-        </p>
+      <div class="row mb-3">
+        <div class="col-12 col-lg-3">
+          <label for="name" class="form-label">
+            Project Name *
+          </label>
+        </div>
+        <div class="col-12 col-lg-9">
+          <input
+            id="name"
+            v-model="form.name"
+            type="text"
+            required
+            class="form-control"
+            :class="{ 'is-invalid': errors.name }"
+            placeholder="Enter project name"
+          />
+          <div v-if="errors.name" class="invalid-feedback">
+            {{ errors.name }}
+          </div>
+        </div>
       </div>
 
       <!-- Project Description -->
-      <div>
-        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-          Description
-        </label>
-        <textarea
-          id="description"
-          v-model="form.description"
-          rows="3"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-        ></textarea>
+      <div class="row mb-3">
+        <div class="col-12 col-lg-3">
+          <label for="description" class="form-label">
+            Description
+          </label>
+        </div>
+        <div class="col-12 col-lg-9">
+          <textarea
+            id="description"
+            v-model="form.description"
+            rows="3"
+            class="form-control"
+            placeholder="Enter project description"
+          ></textarea>
+        </div>
       </div>
 
       <!-- Project Status -->
-      <div>
-        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">
-          Status
-        </label>
-        <select
-          id="status"
-          v-model="form.status"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-        >
-          <option value="planning">Planning</option>
-          <option value="active">Active</option>
-          <option value="on_hold">On Hold</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+      <div class="row mb-3">
+        <div class="col-12 col-lg-3">
+          <label for="status" class="form-label">
+            Status
+          </label>
+        </div>
+        <div class="col-12 col-lg-9">
+          <select
+            id="status"
+            v-model="form.status"
+            class="form-select"
+          >
+            <option value="planning">Planning</option>
+            <option value="active">Active</option>
+            <option value="on_hold">On Hold</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
       </div>
 
       <!-- Error Message -->
-      <div v-if="errors.general" class="text-red-600 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+      <div v-if="errors.general" class="alert alert-danger" role="alert">
         {{ errors.general }}
       </div>
     </form>
@@ -64,7 +78,7 @@
       <button
         type="button"
         @click="handleClose"
-        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+        class="btn btn-secondary"
       >
         Cancel
       </button>
@@ -72,13 +86,12 @@
         type="submit"
         :disabled="loading"
         @click="handleSubmit"
-        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        class="btn btn-primary"
       >
-        <span v-if="loading" class="flex items-center">
-          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
+        <span v-if="loading" class="d-flex align-items-center">
+          <div class="spinner-border spinner-border-sm me-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
           Saving...
         </span>
         <span v-else>Save Changes</span>

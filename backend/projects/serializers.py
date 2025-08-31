@@ -86,6 +86,7 @@ class StageSerializer(serializers.ModelSerializer):
     tasks = TaskSerializer(many=True, read_only=True)
     task_count = serializers.SerializerMethodField()
     completed_task_count = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()  # Use calculated status
     
     class Meta:
         model = Stage
@@ -95,6 +96,10 @@ class StageSerializer(serializers.ModelSerializer):
             'completed_task_count', 'created_at', 'updated_at'
         ]
         read_only_fields = ['owner', 'created_at', 'updated_at']
+    
+    def get_status(self, obj):
+        """Get the calculated status based on tasks"""
+        return obj.calculated_status
     
     def get_task_count(self, obj):
         """Get total number of tasks in this stage"""
@@ -111,7 +116,7 @@ class StageCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Stage
-        fields = ['name', 'description', 'project', 'order', 'status']
+        fields = ['name', 'description', 'project', 'order']
     
     def validate_order(self, value):
         """Validate order field"""

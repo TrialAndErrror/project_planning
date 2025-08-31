@@ -459,11 +459,6 @@ onMounted(() => {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
 }
 
-.card-header {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-  border-bottom: 1px solid #dee2e6;
-}
-
 .border-start {
   border-left: 2px solid #dee2e6 !important;
 }

@@ -4,154 +4,207 @@
       Edit Task
     </template>
 
-    <form @submit.prevent="handleSubmit" class="space-y-4 max-h-[60vh] overflow-y-auto">
+    <form @submit.prevent="handleSubmit" class="max-h-[60vh] overflow-x-hidden overflow-y-auto">
       <!-- Task Name -->
-      <div>
-        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-          Task Name *
-        </label>
-        <input
-          id="name"
-          v-model="form.name"
-          type="text"
-          required
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-          :class="{ 'border-red-500': errors.name }"
-        />
-        <p v-if="errors.name" class="mt-1 text-sm text-red-600">
-          {{ errors.name }}
-        </p>
-      </div>
-
-      <!-- Task Description -->
-      <div>
-        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-          Description
-        </label>
-        <textarea
-          id="description"
-          v-model="form.description"
-          rows="3"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-        ></textarea>
+      <div class="row mb-3">
+        <div class="col-12 col-lg-3">
+          <label for="name" class="form-label">
+            Task Name *
+          </label>
+        </div>
+        <div class="col-12 col-lg-9">
+          <input
+            id="name"
+            v-model="form.name"
+            type="text"
+            required
+            class="form-control"
+            :class="{ 'is-invalid': errors.name }"
+            placeholder="Enter task name"
+          />
+          <div v-if="errors.name" class="invalid-feedback">
+            {{ errors.name }}
+          </div>
+        </div>
       </div>
 
       <!-- Stage Selection -->
-      <div>
-        <label for="stage" class="block text-sm font-medium text-gray-700 mb-1">
-          Stage (Optional)
-        </label>
-        <select
-          id="stage"
-          v-model="form.stage"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-        >
-          <option value="">No Stage (General Task)</option>
-          <option v-for="stage in stages" :key="stage.id" :value="stage.id">
-            {{ stage.name }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Priority -->
-      <div>
-        <label for="priority" class="block text-sm font-medium text-gray-700 mb-1">
-          Priority
-        </label>
-        <select
-          id="priority"
-          v-model="form.priority"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-          <option value="urgent">Urgent</option>
-        </select>
-      </div>
-
-      <!-- Status -->
-      <div>
-        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">
-          Status
-        </label>
-        <select
-          id="status"
-          v-model="form.status"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-        >
-          <option value="not_started">Not Started</option>
-          <option value="in_progress">In Progress</option>
-          <option value="review">In Review</option>
-          <option value="completed">Completed</option>
-          <option value="blocked">Blocked</option>
-        </select>
-      </div>
-
-      <!-- Time Estimates -->
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="estimated_hours" class="block text-sm font-medium text-gray-700 mb-1">
-            Estimated Hours
+      <div class="row mb-3">
+        <div class="col-12 col-lg-3">
+          <label for="stage" class="form-label">
+            Stage (Optional)
           </label>
-          <input
-            id="estimated_hours"
-            v-model.number="form.estimated_hours"
-            type="number"
-            min="0"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-          />
         </div>
-        <div>
-          <label for="estimated_minutes" class="block text-sm font-medium text-gray-700 mb-1">
-            Estimated Minutes
-          </label>
+        <div class="col-12 col-lg-9">
           <select
-            id="estimated_minutes"
-            v-model.number="form.estimated_minutes"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+            id="stage"
+            v-model="form.stage"
+            class="form-select"
           >
-            <option value="0">0</option>
-            <option value="15">15</option>
-            <option value="30">30</option>
-            <option value="45">45</option>
+            <option value="">No Stage (General Task)</option>
+            <option v-for="stage in stages" :key="stage.id" :value="stage.id">
+              {{ stage.name }}
+            </option>
           </select>
         </div>
       </div>
 
-      <!-- Timeline -->
-      <div class="border-t pt-4">
-        <h4 class="text-sm font-medium text-gray-700 mb-3">Timeline (Optional)</h4>
-        
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <label for="planned_start_date" class="block text-sm font-medium text-gray-700 mb-1">
-              Planned Start Date
-            </label>
-            <input
-              id="planned_start_date"
-              v-model="form.timeline.planned_start_date"
-              type="datetime-local"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-            />
+      <!-- Task Description -->
+      <div class="row mb-3">
+        <div class="col-12 col-lg-3">
+          <label for="description" class="form-label">
+            Description
+          </label>
+        </div>
+        <div class="col-12 col-lg-9">
+          <textarea
+            id="description"
+            v-model="form.description"
+            rows="3"
+            class="form-control"
+            placeholder="Enter task description"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Task Details Collapsible Section -->
+      <div class="card mb-3">
+        <div class="card-header" role="button" @click="toggleTaskDetails" style="cursor: pointer;">
+          <div class="d-flex justify-content-between align-items-center">
+            <span>Task Details</span>
+            <i class="bi" :class="showTaskDetails ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </div>
+        </div>
+        <div v-show="showTaskDetails" class="card-body">
+          <!-- Priority -->
+          <div class="row mb-3">
+            <div class="col-12 col-lg-3">
+              <label for="priority" class="form-label">
+                Priority
+              </label>
+            </div>
+            <div class="col-12 col-lg-9">
+              <select
+                id="priority"
+                v-model="form.priority"
+                class="form-select"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div class="row mb-3">
+            <div class="col-12 col-lg-3">
+              <label for="status" class="form-label">
+                Status
+              </label>
+            </div>
+            <div class="col-12 col-lg-9">
+              <select
+                id="status"
+                v-model="form.status"
+                class="form-select"
+              >
+                <option value="not_started">Not Started</option>
+                <option value="in_progress">In Progress</option>
+                <option value="review">In Review</option>
+                <option value="completed">Completed</option>
+                <option value="blocked">Blocked</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Time Estimates -->
+          <div class="row mb-3">
+            <div class="col-12 col-lg-3">
+              <label class="form-label">Time Estimates</label>
+            </div>
+            <div class="col-12 col-lg-9">
+              <div class="row">
+                <div class="col-6">
+                  <label for="estimated_hours" class="form-label">
+                    Hours
+                  </label>
+                  <input
+                    id="estimated_hours"
+                    v-model.number="form.estimated_hours"
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    placeholder="0"
+                  />
+                </div>
+                <div class="col-6">
+                  <label for="estimated_minutes" class="form-label">
+                    Minutes
+                  </label>
+                  <select
+                    id="estimated_minutes"
+                    v-model.number="form.estimated_minutes"
+                    class="form-select"
+                  >
+                    <option value="0">0</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline Collapsible Section -->
+      <div class="card mb-3">
+        <div class="card-header" role="button" @click="toggleTimeline" style="cursor: pointer;">
+          <div class="d-flex justify-content-between align-items-center">
+            <span>Timeline</span>
+            <i class="bi" :class="showTimeline ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </div>
+        </div>
+        <div v-show="showTimeline" class="card-body">
+          <div class="row mb-3">
+            <div class="col-12 col-lg-3">
+              <label for="planned_start_date" class="form-label">
+                Planned Start Date
+              </label>
+            </div>
+            <div class="col-12 col-lg-9">
+              <input
+                id="planned_start_date"
+                v-model="form.timeline.planned_start_date"
+                type="datetime-local"
+                class="form-control"
+              />
+            </div>
           </div>
           
-          <div>
-            <label for="planned_due_date" class="block text-sm font-medium text-gray-700 mb-1">
-              Planned Due Date
-            </label>
-            <input
-              id="planned_due_date"
-              v-model="form.timeline.planned_due_date"
-              type="datetime-local"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-            />
+          <div class="row mb-3">
+            <div class="col-12 col-lg-3">
+              <label for="planned_due_date" class="form-label">
+                Planned Due Date
+              </label>
+            </div>
+            <div class="col-12 col-lg-9">
+              <input
+                id="planned_due_date"
+                v-model="form.timeline.planned_due_date"
+                type="datetime-local"
+                class="form-control"
+              />
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Error Message -->
-      <div v-if="errors.general" class="text-red-600 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+      <div v-if="errors.general" class="alert alert-danger" role="alert">
         {{ errors.general }}
       </div>
     </form>
@@ -160,7 +213,7 @@
       <button
         type="button"
         @click="handleClose"
-        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+        class="btn btn-secondary"
       >
         Cancel
       </button>
@@ -168,13 +221,12 @@
         type="submit"
         :disabled="loading"
         @click="handleSubmit"
-        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        class="btn btn-primary"
       >
-        <span v-if="loading" class="flex items-center">
-          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
+        <span v-if="loading" class="d-flex align-items-center">
+          <div class="spinner-border spinner-border-sm me-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
           Saving...
         </span>
         <span v-else>Save Changes</span>
@@ -208,6 +260,8 @@ const emit = defineEmits(['update:modelValue', 'saved'])
 const projectStore = useProjectStore()
 const loading = ref(false)
 const errors = reactive({})
+const showTaskDetails = ref(false)
+const showTimeline = ref(false)
 
 const form = reactive({
   name: '',
@@ -250,6 +304,14 @@ onMounted(() => {
 
 const handleClose = () => {
   emit('update:modelValue', false)
+}
+
+const toggleTaskDetails = () => {
+  showTaskDetails.value = !showTaskDetails.value
+}
+
+const toggleTimeline = () => {
+  showTimeline.value = !showTimeline.value
 }
 
 const handleSubmit = async () => {
@@ -303,4 +365,11 @@ const handleSubmit = async () => {
     loading.value = false
   }
 }
-</script> 
+</script>
+
+
+<style>
+.card-header {
+  background-color: #99cd9a;
+}
+</style>
