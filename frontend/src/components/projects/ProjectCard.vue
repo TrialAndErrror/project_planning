@@ -50,7 +50,7 @@ const deleteProject = async (projectId: number): Promise<void> => {
       <div class="d-flex justify-content-between align-items-start mb-4">
         <div class="flex-grow-1 me-3">
           <h3 class="card-title h4 text-dark mb-2">
-            {{ project.title || 'Untitled Project' }}
+            {{ project.name || 'Untitled Project' }}
           </h3>
           <p class="text-muted mb-0">
             {{ project.description || 'No description' }}

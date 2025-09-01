@@ -11,7 +11,7 @@ export interface User {
 // Project types
 export interface Project {
   id: number
-  title: string
+  name: string
   description: string
   created_at: string
   updated_at: string
@@ -25,7 +25,7 @@ export interface Project {
 
 export interface Stage {
   id: number
-  title: string
+  name: string
   description: string
   order: number
   project: number
@@ -38,7 +38,7 @@ export interface Stage {
 
 export interface Task {
   id: number
-  title: string
+  name: string
   description: string
   status: 'todo' | 'in_progress' | 'done'
   priority: 'low' | 'medium' | 'high'
@@ -88,17 +88,17 @@ export interface RegisterForm {
 }
 
 export interface ProjectForm {
-  title: string
+  name: string
   description: string
 }
 
 export interface StageForm {
-  title: string
+  name: string
   description: string
 }
 
 export interface TaskForm {
-  title: string
+  name: string
   description: string
   status: 'todo' | 'in_progress' | 'done'
   priority: 'low' | 'medium' | 'high'
