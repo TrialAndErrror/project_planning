@@ -383,13 +383,13 @@ const handleTaskAdded = () => {
 
 const handleStageUpdated = () => {
   showEditStageModal.value = false
-  editingStage.value = {}
+  editingStage.value = {} as Stage
   loadProject()
 }
 
 const handleTaskUpdated = () => {
   showEditTaskModal.value = false
-  editingTask.value = {}
+  editingTask.value = {} as Task
   loadProject()
 }
 
@@ -460,11 +460,6 @@ onMounted(() => {
 .card-header:hover {
   background-color: #e9ecef !important;
 }
-
-.border-start {
-  border-left: 2px solid #dee2e6 !important;
-}
-
 
 .space-y-3 {
   padding: 1.25rem;
