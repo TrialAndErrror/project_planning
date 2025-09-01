@@ -17,6 +17,10 @@ export interface Project {
   updated_at: string
   owner: User
   stages: Stage[]
+  stage_count?: number
+  task_count?: number
+  completed_task_count?: number
+  progress_percentage?: number
 }
 
 export interface Stage {
@@ -28,6 +32,8 @@ export interface Stage {
   tasks: Task[]
   created_at: string
   updated_at: string
+  task_count?: number
+  completed_task_count?: number
 }
 
 export interface Task {

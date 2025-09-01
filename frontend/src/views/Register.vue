@@ -93,73 +93,57 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '@/stores/auth'
 
-export default {
-  name: 'Register',
-  setup() {
-    const router = useRouter()
-    const authStore = useAuthStore()
-    
-    const email = ref('')
-    const username = ref('')
-    const password1 = ref('')
-    const password2 = ref('')
-    const loading = ref(false)
-    const error = ref('')
-    const success = ref('')
-    
-    const handleRegister = async () => {
-      loading.value = true
-      error.value = ''
-      success.value = ''
-      
-      // Basic validation
-      if (password1.value !== password2.value) {
-        error.value = 'Passwords do not match.'
-        loading.value = false
-        return
-      }
-      
-      const result = await authStore.register(
-        email.value, 
-        password1.value, 
-        password2.value, 
-        username.value
-      )
-      
-      if (result.success) {
-        success.value = result.message || 'Registration successful! Please check your email to verify your account.'
-        // Clear form
-        email.value = ''
-        username.value = ''
-        password1.value = ''
-        password2.value = ''
-      } else {
-        error.value = result.error?.non_field_errors?.[0] || 
-                     result.error?.email?.[0] || 
-                     result.error?.password1?.[0] || 
-                     result.error?.password2?.[0] || 
-                     'Registration failed. Please try again.'
-      }
-      
-      loading.value = false
-    }
-    
-    return {
-      email,
-      username,
-      password1,
-      password2,
-      loading,
-      error,
-      success,
-      handleRegister
-    }
+const router = useRouter()
+const authStore = useAuthStore()
+
+const email = ref('')
+const username = ref('')
+const password1 = ref('')
+const password2 = ref('')
+const loading = ref(false)
+const error = ref('')
+const success = ref('')
+
+const handleRegister = async () => {
+  loading.value = true
+  error.value = ''
+  success.value = ''
+  
+  // Basic validation
+  if (password1.value !== password2.value) {
+    error.value = 'Passwords do not match.'
+    loading.value = false
+    return
   }
+  
+  const result = await authStore.register(
+    email.value, 
+    password1.value, 
+    password2.value, 
+    username.value
+  )
+  
+  if (result.success) {
+    success.value = result.message || 'Registration successful! Please check your email to verify your account.'
+    // Clear form
+    email.value = ''
+    username.value = ''
+    password1.value = ''
+    password2.value = ''
+  } else {
+    error.value = result.error?.non_field_errors?.[0] || 
+                 result.error?.email?.[0] || 
+                 result.error?.password1?.[0] || 
+                 result.error?.password2?.[0] || 
+                 'Registration failed. Please try again.'
+  }
+  
+  loading.value = false
 }
 </script>
 

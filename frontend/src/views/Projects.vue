@@ -72,9 +72,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { useProjectStore } from '../stores/project'
+import { useProjectStore } from '@/stores/project'
 import ProjectsListSummary from "../components/projects/ProjectsListSummary.vue";
 import ProjectCard from "../components/projects/ProjectCard.vue";
 

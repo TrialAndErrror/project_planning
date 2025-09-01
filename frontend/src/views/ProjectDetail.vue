@@ -32,9 +32,6 @@
                 <p class="text-muted mb-0">{{ project.description || 'No description' }}</p>
               </div>
               <div class="d-flex align-items-center gap-3">
-                <span class="badge rounded-pill px-3 py-2" :class="statusClasses">
-                  {{ getStatusLabel(project.status) }}
-                </span>
                 <button
                   @click="showEditModal = true"
                   class="btn btn-primary btn-sm"
@@ -196,74 +193,7 @@
                 </div>
               </div>
 
-              <!-- Tasks without stage -->
-              <div v-if="getTasksWithoutStage().length > 0" class="card border">
-                <div 
-                  class="card-header bg-light py-3 stage-header"
-                  @click="toggleStage('general')"
-                >
-                  <div class="d-flex align-items-center gap-3">
-                    <i class="bi" :class="isStageExpanded('general') ? 'bi-list-task' : 'bi-list'"></i>
-                    <span class="fw-semibold text-dark">General Tasks</span>
-                    <i class="bi" :class="isStageExpanded('general') ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                  </div>
-                </div>
-                <div v-show="isStageExpanded('general')" class="card-body pt-0">
-                  <div v-for="task in getTasksWithoutStage()" :key="task.id" class="task-item">
-                    <!-- Task Header -->
-                    <div 
-                      class="d-flex justify-content-between align-items-center py-2 task-header"
-                      @click="toggleTask(task.id)"
-                    >
-                      <div class="d-flex align-items-center gap-3">
-                        <i class="bi bi-check2-square text-muted"></i>
-                        <span class="text-dark">{{ task.name }}</span>
-                        <span class="badge rounded-pill" :class="getPriorityBadgeClasses(task.priority)">
-                          {{ task.priority }}
-                        </span>
-                        <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
-                          {{ getStatusLabel(task.status) }}
-                        </span>
-                      </div>
-                      <div class="d-flex align-items-center gap-2">
-                        <small class="text-muted">{{ task.estimated_time_formatted }}</small>
-                        <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                      </div>
-                    </div>
-                    
-                    <!-- Task Details (Expandable) -->
-                    <div v-show="isTaskExpanded(task.id)" class="mt-3 task-details">
-                      <!-- Task Description -->
-                      <div v-if="task.description" class="mb-3">
-                        <p class="text-muted mb-0">{{ task.description }}</p>
-                      </div>
-                      
-                      <!-- Task Action Buttons -->
-                      <div class="d-flex gap-2 mt-3 justify-content-end">
-                        <button
-                          v-if="task.status !== 'completed'"
-                          @click="completeTask(task.id)"
-                          class="btn btn-success btn-sm me-auto"
-                        >
-                          <i class="bi bi-check-lg me-1"></i>Mark Completed
-                        </button>
-                        <button
-                          @click="editTask(task)"
-                          class="btn btn-primary btn-sm"
-                        >
-                          <i class="bi bi-pencil me-1"></i>Edit
-                        </button>
-                        <button
-                          @click="deleteTask(task.id)"
-                          class="btn btn-danger btn-sm"
-                        >
-                          <i class="bi bi-trash me-1"></i>Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -309,10 +239,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useProjectStore } from '../stores/project'
+import { useProjectStore } from '@/stores/project'
 import EditProjectModal from '../components/EditProjectModal.vue'
 import AddStageModal from '../components/AddStageModal.vue'
 import AddTaskModal from '../components/AddTaskModal.vue'
@@ -339,8 +269,7 @@ const showEditTaskModal = ref(false)
 const editingStage = ref(null)
 const editingTask = ref(null)
 
-// Status classes
-const statusClasses = computed(() => projectStore.projectStatusClasses)
+
 
 // Load project data
 const loadProject = async () => {
@@ -355,7 +284,6 @@ const getStatusLabel = projectStore.getStatusLabel
 const getStatusBadgeClasses = projectStore.getStatusBadgeClasses
 const getPriorityBadgeClasses = projectStore.getPriorityBadgeClasses
 const getTasksForStage = projectStore.getTasksForStage
-const getTasksWithoutStage = projectStore.getTasksWithoutStage
 
 // Toggle methods - now using store functions
 const toggleStage = projectStore.toggleStage

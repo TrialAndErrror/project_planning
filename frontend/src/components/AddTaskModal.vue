@@ -235,9 +235,9 @@
   </BaseModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import { useProjectStore } from '../stores/project'
+import { useProjectStore } from '@/stores/project'
 import BaseModal from './BaseModal.vue'
 
 const props = defineProps({

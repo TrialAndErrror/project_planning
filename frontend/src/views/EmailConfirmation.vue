@@ -53,55 +53,44 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
-export default {
-  name: 'EmailConfirmation',
-  setup() {
-    const route = useRoute()
-    const loading = ref(false)
-    const success = ref(false)
-    const error = ref('')
-    
-    const verifyEmail = async () => {
-      const key = route.query.key
-      
-      if (!key) {
-        error.value = 'Invalid verification link. Please check your email for the correct link.'
-        return
-      }
-      
-      loading.value = true
-      
-      try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-        const response = await axios.post(`${API_URL}/api/auth/registration/verify-email/`, {
-          key: key
-        })
-        
-        success.value = true
-      } catch (err) {
-        console.error('Email verification error:', err)
-        error.value = err.response?.data?.detail || 'Email verification failed. Please try again.'
-      } finally {
-        loading.value = false
-      }
-    }
-    
-    onMounted(() => {
-      verifyEmail()
+const route = useRoute()
+const loading = ref(false)
+const success = ref(false)
+const error = ref('')
+
+const verifyEmail = async () => {
+  const key = route.query.key
+  
+  if (!key) {
+    error.value = 'Invalid verification link. Please check your email for the correct link.'
+    return
+  }
+  
+  loading.value = true
+  
+  try {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const response = await axios.post(`${API_URL}/api/auth/registration/verify-email/`, {
+      key: key
     })
     
-    return {
-      loading,
-      success,
-      error
-    }
+    success.value = true
+  } catch (err: any) {
+    console.error('Email verification error:', err)
+    error.value = err.response?.data?.detail || 'Email verification failed. Please try again.'
+  } finally {
+    loading.value = false
   }
 }
+
+onMounted(() => {
+  verifyEmail()
+})
 </script>
 
 <style scoped>

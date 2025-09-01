@@ -1,8 +1,8 @@
-<script setup>
-
-import { useProjectStore } from "@/stores/project";
-
+<script setup lang="ts">
+import { useProjectStore } from "@/stores/project"
 import { computed } from 'vue'
+import type { Project } from '@/types'
+
 const projectStore = useProjectStore()
 
 const projects = computed(() => projectStore.projects)
@@ -11,42 +11,25 @@ const projects = computed(() => projectStore.projects)
 const totalProjects = computed(() => projects.value.length)
 
 const totalTasks = computed(() => {
-  return projects.value.reduce((total, project) => total + (project.task_count || 0), 0)
+  return projects.value.reduce((total: number, project: Project) => {
+    return total + project.stages.reduce((stageTotal: number, stage: any) => {
+      return stageTotal + stage.tasks.length
+    }, 0)
+  }, 0)
 })
 
 const completedTasks = computed(() => {
-  return projects.value.reduce((total, project) => total + (project.completed_task_count || 0), 0)
+  return projects.value.reduce((total: number, project: Project) => {
+    return total + project.stages.reduce((stageTotal: number, stage: any) => {
+      return stageTotal + stage.tasks.filter((task: any) => task.status === 'done').length
+    }, 0)
+  }, 0)
 })
 
 const totalEstimatedTime = computed(() => {
-  let totalHours = 0
-  let totalMinutes = 0
-
-  projects.value.forEach(project => {
-    // Only include incomplete projects
-    if (project.status !== 'completed') {
-      if (project.total_estimated_hours) {
-        totalHours += project.total_estimated_hours
-      }
-      if (project.total_estimated_minutes) {
-        totalMinutes += project.total_estimated_minutes
-      }
-    }
-  })
-
-  // Convert minutes to hours
-  totalHours += Math.floor(totalMinutes / 60)
-  totalMinutes = totalMinutes % 60
-
-  if (totalHours > 0 && totalMinutes > 0) {
-    return `${totalHours}h ${totalMinutes}m`
-  } else if (totalHours > 0) {
-    return `${totalHours}h`
-  } else if (totalMinutes > 0) {
-    return `${totalMinutes}m`
-  } else {
-    return '0h'
-  }
+  // Since we don't have estimated time in the current data structure,
+  // we'll return a placeholder for now
+  return '0h'
 })
 
 </script>

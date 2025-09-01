@@ -65,48 +65,35 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '@/stores/auth'
 
-export default {
-  name: 'Login',
-  setup() {
-    const router = useRouter()
-    const authStore = useAuthStore()
-    
-    const email = ref('')
-    const password = ref('')
-    const loading = ref(false)
-    const error = ref('')
-    
-    const handleLogin = async () => {
-      loading.value = true
-      error.value = ''
-      
-      const result = await authStore.login(email.value, password.value)
-      
-      if (result.success) {
-        router.push('/')
-      } else {
-        error.value = result.error?.non_field_errors?.[0] || 
-                     result.error?.email?.[0] || 
-                     result.error?.password?.[0] || 
-                     'Login failed. Please try again.'
-      }
-      
-      loading.value = false
-    }
-    
-    return {
-      email,
-      password,
-      loading,
-      error,
-      handleLogin
-    }
+const router = useRouter()
+const authStore = useAuthStore()
+
+const email = ref('')
+const password = ref('')
+const loading = ref(false)
+const error = ref('')
+
+const handleLogin = async () => {
+  loading.value = true
+  error.value = ''
+  
+  const result = await authStore.login(email.value, password.value)
+  
+  if (result.success) {
+    router.push('/')
+  } else {
+    error.value = result.error?.non_field_errors?.[0] || 
+                 result.error?.email?.[0] || 
+                 result.error?.password?.[0] || 
+                 'Login failed. Please try again.'
   }
+  
+  loading.value = false
 }
 </script>
 

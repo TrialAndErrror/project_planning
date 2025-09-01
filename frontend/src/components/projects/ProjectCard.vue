@@ -13,10 +13,6 @@ const props = defineProps<Props>()
 const projectStore = useProjectStore()
 const router = useRouter()
 
-// Helper functions - using store functions
-const getStatusLabel = projectStore.getStatusLabel
-const getStatusClasses = projectStore.getStatusBadgeClasses
-
 const formatDate = (dateString: string): string => {
   if (!dateString) return 'N/A'
   const date = new Date(dateString)
@@ -25,23 +21,6 @@ const formatDate = (dateString: string): string => {
     month: 'short',
     day: 'numeric'
   })
-}
-
-const formatEstimatedTime = (hours?: number, minutes?: number): string => {
-  if (!hours && !minutes) return '0h'
-
-  const totalHours = (hours || 0) + Math.floor((minutes || 0) / 60)
-  const remainingMinutes = (minutes || 0) % 60
-
-  if (totalHours > 0 && remainingMinutes > 0) {
-    return `${totalHours}h ${remainingMinutes}m`
-  } else if (totalHours > 0) {
-    return `${totalHours}h`
-  } else if (remainingMinutes > 0) {
-    return `${remainingMinutes}m`
-  } else {
-    return '0h'
-  }
 }
 
 const navigateToProject = (): void => {

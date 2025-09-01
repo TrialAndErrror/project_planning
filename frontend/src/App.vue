@@ -14,23 +14,13 @@
   </div>
 </template>
 
-<script>
-import { useAuthStore } from './stores/auth'
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/auth'
 
-export default {
-  name: 'App',
-  setup() {
-    const authStore = useAuthStore()
-    
-    const logout = async () => {
-      await authStore.logout()
-    }
-    
-    return {
-      authStore,
-      logout
-    }
-  }
+const authStore = useAuthStore()
+
+const logout = async () => {
+  await authStore.logout()
 }
 </script>
 

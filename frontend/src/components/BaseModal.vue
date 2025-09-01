@@ -45,7 +45,7 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
@@ -135,7 +135,6 @@ watch(() => props.modelValue, preventBodyScroll)
 
 /* Custom modal header to match navbar */
 .modal-header {
-  background-color: #2c3e50 !important;
   color: white !important;
   border-bottom: 1px solid #34495e;
   border-radius: 8px 8px 0 0;

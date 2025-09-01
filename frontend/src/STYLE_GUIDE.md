@@ -5,7 +5,6 @@ This document describes the CSS architecture and styling conventions used in the
 
 ## File Structure
 - `style.css` - Main stylesheet with global styles, components, and utilities
-- `style-old.css` - Legacy styles (kept for reference)
 
 ## CSS Architecture
 

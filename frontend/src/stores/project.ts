@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import axios, { AxiosInstance } from 'axios'
 import type { Project, Stage, Task, ProjectForm, StageForm, TaskForm } from '@/types'
 
@@ -354,11 +354,7 @@ export const useProjectStore = defineStore('project', () => {
     return stage ? stage.tasks : []
   }
 
-  const getTasksWithoutStage = (): Task[] => {
-    if (!currentProject.value) return []
-    // This would need to be implemented based on your backend structure
-    return []
-  }
+
 
   // Toggle methods for expandable sections
   const toggleStage = (stageId: number): void => {
@@ -385,12 +381,7 @@ export const useProjectStore = defineStore('project', () => {
     return expandedTasks.value.has(taskId)
   }
 
-  // Computed properties
-  const projectStatusClasses = computed(() => {
-    if (!currentProject.value) return ''
-    // This would need to be implemented based on your project structure
-    return ''
-  })
+
 
   return {
     // State
@@ -424,7 +415,6 @@ export const useProjectStore = defineStore('project', () => {
     getStatusBadgeClasses,
     getPriorityBadgeClasses,
     getTasksForStage,
-    getTasksWithoutStage,
     
     // UI State management
     toggleStage,
@@ -432,7 +422,6 @@ export const useProjectStore = defineStore('project', () => {
     isStageExpanded,
     isTaskExpanded,
     
-    // Computed properties
-    projectStatusClasses
+
   }
 })
