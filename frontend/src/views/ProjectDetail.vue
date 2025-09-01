@@ -24,8 +24,8 @@
       <!-- Project Content -->
       <div v-else-if="project">
         <!-- Project Header -->
-        <div class="card shadow-sm border-0 mb-4">
-          <div class="card-body p-4">
+        <div class="card shadow-sm border-0 mb-4 project-header-card">
+          <div class="card-body">
             <div class="row mb-4">
               <div
                   class="col-12 col-lg-6 d-flex justify-content-between align-items-lg-start align-items-center flex-lg-column justify-content-lg-start">
@@ -81,24 +81,24 @@
         </div>
 
         <!-- Tree View -->
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="card project-card shadow-sm border-0">
+          <div class="card-body row">
+            <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start align-items-center my-2">
               <h2 class="h4 text-dark mb-0">Project Structure</h2>
-              <div class="d-flex gap-2">
-                <button
-                    @click="showAddStageModal = true"
-                    class="btn btn-success btn-sm"
-                >
-                  <i class="bi bi-plus-circle me-2"></i>Add Stage
-                </button>
-                <button
-                    @click="showAddTaskModal = true"
-                    class="btn btn-primary btn-sm"
-                >
-                  <i class="bi bi-plus-circle me-2"></i>Add Task
-                </button>
-              </div>
+            </div>
+            <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-end align-items-center gap-2 px-4 my-2">
+              <button
+                  @click="showAddStageModal = true"
+                  class="btn btn-success btn-sm"
+              >
+                <i class="bi bi-plus-circle me-2"></i>Add Stage
+              </button>
+              <button
+                  @click="showAddTaskModal = true"
+                  class="btn btn-primary btn-sm"
+              >
+                <i class="bi bi-plus-circle me-2"></i>Add Task
+              </button>
             </div>
 
             <!-- Stages and Tasks Tree -->
@@ -119,7 +119,6 @@
                       <span class="badge rounded-pill" :class="getStatusBadgeClasses(stage.status)">
                         {{ getStatusLabel(stage.status) }}
                       </span>
-                        <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                       </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex align-items-center gap-2">
@@ -145,30 +144,27 @@
                   <div v-for="task in getTasksForStage(stage.id)" :key="task.id" class="task-item">
                     <!-- Task Header -->
                     <div
-                        class="d-flex justify-content-between align-items-center py-2 task-header"
+                        class="d-flex justify-content-between align-items-center py-lg-2 task-header"
                         @click="toggleTask(task.id)"
                     >
-                      <div class="d-flex align-items-center gap-3">
-                        <div class="d-flex gap-3">
-                          <i class="bi bi-check2-square text-muted"></i>
-                          <span class="text-dark">{{ task.name }}</span>
-                        </div>
-                        <div class="d-flex gap-3">
-                          <i class="bi bi-check2-square text-muted"></i>
+                      <div class="d-flex gap-3">
+                        <i class="bi bi-check2-square text-muted"></i>
+                        <span class="text-dark">{{ task.name }}</span>
+                      </div>
+                      <div class="d-flex gap-3">
                           <span class="badge rounded-pill" :class="getPriorityBadgeClasses(task.priority)">
                           {{ task.priority }}
                         </span>
-                          <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
+                        <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
                           {{ getStatusLabel(task.status) }}
                         </span>
-                          <small class="text-muted">{{ task.estimated_time_formatted }}</small>
-                          <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                        </div>
+                        <small class="text-muted">{{ task.estimated_time_formatted }}</small>
+                        <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                       </div>
                     </div>
 
                     <!-- Task Details (Expandable) -->
-                    <div v-show="isTaskExpanded(task.id)" class="mt-3 task-details">
+                    <div v-show="isTaskExpanded(task.id)" class="mt-lg-3 task-details">
                       <!-- Task Description -->
                       <div v-if="task.description" class="mb-3">
                         <p class="text-muted mb-0">{{ task.description }}</p>
@@ -181,7 +177,7 @@
                             @click="completeTask(task.id)"
                             class="btn btn-success btn-sm"
                         >
-                          <i class="bi bi-check-lg me-1"></i>Mark Completed
+                          <i class="bi bi-check-lg me-1"></i>Completed
                         </button>
                         <button
                             @click="editTask(task)"
@@ -202,7 +198,7 @@
               </div>
 
               <!-- Tasks without stage (General Tasks) -->
-              <div v-if="getTasksWithoutStage().length > 0" class="card border">
+              <div v-if="getTasksWithoutStage().length > 0" class="card project-card border">
                 <div
                     class="card-header bg-light py-3 stage-header"
                     @click="toggleStage(0)"
@@ -225,22 +221,20 @@
                         class="d-flex justify-content-between align-items-center py-2 task-header"
                         @click="toggleTask(task.id)"
                     >
-                      <div class="d-flex align-items-center gap-3">
-                        <i class="bi bi-check2-square text-muted"></i>
-                        <span class="text-dark">{{ task.name }}</span>
-                        <span class="badge rounded-pill" :class="getPriorityBadgeClasses(task.priority)">
+                      <i class="bi bi-check2-square text-muted"></i>
+                      <span class="text-dark">{{ task.name }}</span>
+                      <span class="badge rounded-pill" :class="getPriorityBadgeClasses(task.priority)">
                           {{ task.priority }}
                         </span>
-                        <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
+                      <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
                           {{ getStatusLabel(task.status) }}
                         </span>
-                        <small class="text-muted">{{ task.estimated_time_formatted }}</small>
-                        <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                      </div>
+                      <small class="text-muted">{{ task.estimated_time_formatted }}</small>
+                      <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </div>
 
                     <!-- Task Details (Expandable) -->
-                    <div v-show="isTaskExpanded(task.id)" class="mt-3 task-details">
+                    <div v-show="isTaskExpanded(task.id)" class="mt-lg-3 task-details">
                       <!-- Task Description -->
                       <div v-if="task.description" class="mb-3">
                         <p class="text-muted mb-0">{{ task.description }}</p>
@@ -253,7 +247,7 @@
                             @click="completeTask(task.id)"
                             class="btn btn-success btn-sm me-auto"
                         >
-                          <i class="bi bi-check-lg me-1"></i>Mark Completed
+                          <i class="bi bi-check-lg me-1"></i>Completed
                         </button>
                         <button
                             @click="editTask(task)"
@@ -471,6 +465,11 @@ onMounted(() => {
   border-left: 2px solid #dee2e6 !important;
 }
 
+
+.space-y-3 {
+  padding: 1.25rem;
+}
+
 .space-y-3 > * + * {
   margin-top: 1rem;
 }
@@ -538,13 +537,17 @@ onMounted(() => {
   margin: -0.5rem;
 }
 
-@media (max-width: 767.98px) {
+.project-header-card .card-body {
+  padding: 1.25rem;
+}
+
+@media (max-width: 900px) {
   .project-detail {
-    padding: 0.5rem;
+    padding: 0.25rem;
   }
 
-  .card-body {
-    padding: 1.5rem !important;
+  .card.project-card .card-body {
+    padding: 0;
   }
 
   .btn {
