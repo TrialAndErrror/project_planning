@@ -86,4 +86,10 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+@media (max-width: 900px) {
+  .main-content {
+    padding: 0;
+  }
+}
 </style> 

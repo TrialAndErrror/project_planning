@@ -47,7 +47,7 @@ const deleteProject = async (projectId: number): Promise<void> => {
       style="cursor: pointer;"
     >
       <!-- Project Header -->
-      <div class="d-flex justify-content-between align-items-start mb-4">
+      <div class="d-flex justify-content-between align-items-lg-start mb-4">
         <div class="flex-grow-1 me-3">
           <h3 class="card-title h4 text-dark mb-2">
             {{ project.name || 'Untitled Project' }}
@@ -194,33 +194,6 @@ const deleteProject = async (projectId: number): Promise<void> => {
   transition: width 0.3s ease;
 }
 
-.badge {
-  font-weight: 500;
-  font-size: 0.75rem;
-}
-
-/* Status Badge Styles */
-.status-planning,
-.status-on-hold {
-  background-color: rgba(255, 193, 7, 0.1) !important;
-  color: #ffc107 !important;
-}
-
-.status-active {
-  background-color: rgba(25, 135, 84, 0.1) !important;
-  color: #198754 !important;
-}
-
-.status-completed {
-  background-color: rgba(108, 117, 125, 0.2) !important;
-  color: #000000 !important;
-}
-
-.status-cancelled {
-  background-color: rgba(220, 53, 69, 0.1) !important;
-  color: #dc3545 !important;
-}
-
 @media (max-width: 767.98px) {
   .h4 {
     font-size: 1.25rem;
@@ -230,14 +203,5 @@ const deleteProject = async (projectId: number): Promise<void> => {
     padding: 1rem !important;
   }
 
-  .d-flex.justify-content-between.align-items-start {
-    flex-direction: column;
-    align-items: flex-start !important;
-  }
-
-  .d-flex.flex-column.align-items-end {
-    align-items: flex-start !important;
-    margin-top: 1rem;
-  }
 }
 </style>

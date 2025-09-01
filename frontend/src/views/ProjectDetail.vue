@@ -26,15 +26,16 @@
         <!-- Project Header -->
         <div class="card shadow-sm border-0 mb-4">
           <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-4">
-              <div class="flex-grow-1 me-3">
+            <div class="row mb-4">
+              <div
+                  class="col-12 col-lg-6 d-flex justify-content-between align-items-lg-start align-items-center flex-lg-column justify-content-lg-start">
                 <h1 class="h2 text-dark mb-2">{{ project.name }}</h1>
                 <p class="text-muted mb-0">{{ project.description || 'No description' }}</p>
               </div>
-              <div class="d-flex align-items-center gap-3">
+              <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-end align-items-center">
                 <button
-                  @click="showEditModal = true"
-                  class="btn btn-primary btn-sm"
+                    @click="showEditModal = true"
+                    class="btn btn-primary btn-sm"
                 >
                   <i class="bi bi-pencil me-2"></i>Edit Project
                 </button>
@@ -86,14 +87,14 @@
               <h2 class="h4 text-dark mb-0">Project Structure</h2>
               <div class="d-flex gap-2">
                 <button
-                  @click="showAddStageModal = true"
-                  class="btn btn-success btn-sm"
+                    @click="showAddStageModal = true"
+                    class="btn btn-success btn-sm"
                 >
                   <i class="bi bi-plus-circle me-2"></i>Add Stage
                 </button>
                 <button
-                  @click="showAddTaskModal = true"
-                  class="btn btn-primary btn-sm"
+                    @click="showAddTaskModal = true"
+                    class="btn btn-primary btn-sm"
                 >
                   <i class="bi bi-plus-circle me-2"></i>Add Task
                 </button>
@@ -104,30 +105,34 @@
             <div class="space-y-3" style="gap: 1rem;">
               <!-- Stages -->
               <div v-for="stage in project.stages" :key="stage.id" class="card border">
-                <div 
-                  class="card-header bg-light py-3 stage-header" 
-                  @click="toggleStage(stage.id)"
+                <div
+                    class="card-header bg-light py-3 stage-header"
+                    @click="toggleStage(stage.id)"
                 >
                   <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-3">
-                      <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-folder2-open' : 'bi-folder'"></i>
-                      <span class="fw-semibold text-dark">{{ stage.name }}</span>
+                    <div class="col-12 col-lg-6 d-flex align-items-center justify-content-between">
+                      <div class="d-flex gap-3">
+                        <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-folder2-open' : 'bi-folder'"></i>
+                        <span class="fw-semibold text-dark">{{ stage.name }}</span>
+                      </div>
+                      <div class="d-flex gap-3">
                       <span class="badge rounded-pill" :class="getStatusBadgeClasses(stage.status)">
                         {{ getStatusLabel(stage.status) }}
                       </span>
-                      <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                        <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                      </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
+                    <div class="col-lg-6 d-none d-lg-flex align-items-center gap-2">
                       <small class="text-muted">{{ stage.task_count }} tasks</small>
                       <button
-                        @click.stop="editStage(stage)"
-                        class="btn btn-outline-primary btn-sm"
+                          @click.stop="editStage(stage)"
+                          class="btn btn-outline-primary btn-sm"
                       >
                         <i class="bi bi-pencil"></i>
                       </button>
                       <button
-                        @click.stop="deleteStage(stage.id)"
-                        class="btn btn-outline-danger btn-sm"
+                          @click.stop="deleteStage(stage.id)"
+                          class="btn btn-outline-danger btn-sm"
                       >
                         <i class="bi bi-trash"></i>
                       </button>
@@ -139,51 +144,54 @@
                 <div v-show="isStageExpanded(stage.id)" class="card-body pt-0">
                   <div v-for="task in getTasksForStage(stage.id)" :key="task.id" class="task-item">
                     <!-- Task Header -->
-                    <div 
-                      class="d-flex justify-content-between align-items-center py-2 task-header"
-                      @click="toggleTask(task.id)"
+                    <div
+                        class="d-flex justify-content-between align-items-center py-2 task-header"
+                        @click="toggleTask(task.id)"
                     >
                       <div class="d-flex align-items-center gap-3">
-                        <i class="bi bi-check2-square text-muted"></i>
-                        <span class="text-dark">{{ task.name }}</span>
-                        <span class="badge rounded-pill" :class="getPriorityBadgeClasses(task.priority)">
+                        <div class="d-flex gap-3">
+                          <i class="bi bi-check2-square text-muted"></i>
+                          <span class="text-dark">{{ task.name }}</span>
+                        </div>
+                        <div class="d-flex gap-3">
+                          <i class="bi bi-check2-square text-muted"></i>
+                          <span class="badge rounded-pill" :class="getPriorityBadgeClasses(task.priority)">
                           {{ task.priority }}
                         </span>
-                        <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
+                          <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
                           {{ getStatusLabel(task.status) }}
                         </span>
-                      </div>
-                      <div class="d-flex align-items-center gap-2">
-                        <small class="text-muted">{{ task.estimated_time_formatted }}</small>
-                        <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                          <small class="text-muted">{{ task.estimated_time_formatted }}</small>
+                          <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                        </div>
                       </div>
                     </div>
-                    
+
                     <!-- Task Details (Expandable) -->
                     <div v-show="isTaskExpanded(task.id)" class="mt-3 task-details">
                       <!-- Task Description -->
                       <div v-if="task.description" class="mb-3">
                         <p class="text-muted mb-0">{{ task.description }}</p>
                       </div>
-                      
+
                       <!-- Task Action Buttons -->
                       <div class="d-flex gap-2 mt-3">
                         <button
-                          v-if="task.status !== 'completed'"
-                          @click="completeTask(task.id)"
-                          class="btn btn-success btn-sm"
+                            v-if="task.status !== 'completed'"
+                            @click="completeTask(task.id)"
+                            class="btn btn-success btn-sm"
                         >
                           <i class="bi bi-check-lg me-1"></i>Mark Completed
                         </button>
                         <button
-                          @click="editTask(task)"
-                          class="btn btn-primary btn-sm"
+                            @click="editTask(task)"
+                            class="btn btn-primary btn-sm"
                         >
                           <i class="bi bi-pencil me-1"></i>Edit
                         </button>
                         <button
-                          @click="deleteTask(task.id)"
-                          class="btn btn-danger btn-sm"
+                            @click="deleteTask(task.id)"
+                            class="btn btn-danger btn-sm"
                         >
                           <i class="bi bi-trash me-1"></i>Delete
                         </button>
@@ -195,27 +203,27 @@
 
               <!-- Tasks without stage (General Tasks) -->
               <div v-if="getTasksWithoutStage().length > 0" class="card border">
-                <div 
-                  class="card-header bg-light py-3 stage-header"
-                  @click="toggleStage('general')"
+                <div
+                    class="card-header bg-light py-3 stage-header"
+                    @click="toggleStage(0)"
                 >
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-3">
-                      <i class="bi" :class="isStageExpanded('general') ? 'bi-list-task' : 'bi-list'"></i>
+                      <i class="bi" :class="isStageExpanded(0) ? 'bi-list-task' : 'bi-list'"></i>
                       <span class="fw-semibold text-dark">General Tasks</span>
-                      <i class="bi" :class="isStageExpanded('general') ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                       <small class="text-muted">{{ getTasksWithoutStage().length }} tasks</small>
+                      <i class="bi" :class="isStageExpanded(0) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </div>
                   </div>
                 </div>
-                <div v-show="isStageExpanded('general')" class="card-body pt-0">
+                <div v-show="isStageExpanded(0)" class="card-body pt-0">
                   <div v-for="task in getTasksWithoutStage()" :key="task.id" class="task-item">
                     <!-- Task Header -->
-                    <div 
-                      class="d-flex justify-content-between align-items-center py-2 task-header"
-                      @click="toggleTask(task.id)"
+                    <div
+                        class="d-flex justify-content-between align-items-center py-2 task-header"
+                        @click="toggleTask(task.id)"
                     >
                       <div class="d-flex align-items-center gap-3">
                         <i class="bi bi-check2-square text-muted"></i>
@@ -226,38 +234,36 @@
                         <span class="badge rounded-pill" :class="getStatusBadgeClasses(task.status)">
                           {{ getStatusLabel(task.status) }}
                         </span>
-                      </div>
-                      <div class="d-flex align-items-center gap-2">
                         <small class="text-muted">{{ task.estimated_time_formatted }}</small>
                         <i class="bi" :class="isTaskExpanded(task.id) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                       </div>
                     </div>
-                    
+
                     <!-- Task Details (Expandable) -->
                     <div v-show="isTaskExpanded(task.id)" class="mt-3 task-details">
                       <!-- Task Description -->
                       <div v-if="task.description" class="mb-3">
                         <p class="text-muted mb-0">{{ task.description }}</p>
                       </div>
-                      
+
                       <!-- Task Action Buttons -->
                       <div class="d-flex gap-2 mt-3 justify-content-end">
                         <button
-                          v-if="task.status !== 'completed'"
-                          @click="completeTask(task.id)"
-                          class="btn btn-success btn-sm me-auto"
+                            v-if="task.status !== 'completed'"
+                            @click="completeTask(task.id)"
+                            class="btn btn-success btn-sm me-auto"
                         >
                           <i class="bi bi-check-lg me-1"></i>Mark Completed
                         </button>
                         <button
-                          @click="editTask(task)"
-                          class="btn btn-primary btn-sm"
+                            @click="editTask(task)"
+                            class="btn btn-primary btn-sm"
                         >
                           <i class="bi bi-pencil me-1"></i>Edit
                         </button>
                         <button
-                          @click="deleteTask(task.id)"
-                          class="btn btn-danger btn-sm"
+                            @click="deleteTask(task.id)"
+                            class="btn btn-danger btn-sm"
                         >
                           <i class="bi bi-trash me-1"></i>Delete
                         </button>
@@ -274,53 +280,54 @@
 
       <!-- Edit Project Modal -->
       <EditProjectModal
-        v-model="showEditModal"
-        :project="project"
-        @saved="handleProjectUpdated"
+          v-model="showEditModal"
+          :project="project"
+          @saved="handleProjectUpdated"
       />
 
       <!-- Add Stage Modal -->
       <AddStageModal
-        v-model="showAddStageModal"
-        :project-id="projectId"
-        @saved="handleStageAdded"
+          v-model="showAddStageModal"
+          :project-id="projectId"
+          @saved="handleStageAdded"
       />
 
       <!-- Add Task Modal -->
       <AddTaskModal
-        v-model="showAddTaskModal"
-        :project-id="projectId"
-        :stages="project?.stages || []"
-        @saved="handleTaskAdded"
+          v-model="showAddTaskModal"
+          :project-id="projectId"
+          :stages="project?.stages || []"
+          @saved="handleTaskAdded"
       />
 
       <!-- Edit Stage Modal -->
       <EditStageModal
-        v-model="showEditStageModal"
-        :stage="editingStage"
-        @saved="handleStageUpdated"
+          v-model="showEditStageModal"
+          :stage="editingStage"
+          @saved="handleStageUpdated"
       />
 
       <!-- Edit Task Modal -->
       <EditTaskModal
-        v-model="showEditTaskModal"
-        :task="editingTask"
-        :stages="project?.stages || []"
-        @saved="handleTaskUpdated"
+          v-model="showEditTaskModal"
+          :task="editingTask"
+          :stages="project?.stages || []"
+          @saved="handleTaskUpdated"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useProjectStore } from '@/stores/project'
+import {ref, computed, onMounted} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {useProjectStore} from '@/stores/project'
 import EditProjectModal from '../components/EditProjectModal.vue'
 import AddStageModal from '../components/AddStageModal.vue'
 import AddTaskModal from '../components/AddTaskModal.vue'
 import EditStageModal from '../components/EditStageModal.vue'
 import EditTaskModal from '../components/EditTaskModal.vue'
+import {Stage, Task} from "@/types";
 
 const route = useRoute()
 const router = useRouter()
@@ -339,9 +346,8 @@ const showEditStageModal = ref(false)
 const showEditTaskModal = ref(false)
 
 // Editing states
-const editingStage = ref(null)
-const editingTask = ref(null)
-
+const editingStage = ref({} as Stage)
+const editingTask = ref({} as Task)
 
 
 // Load project data
@@ -383,27 +389,27 @@ const handleTaskAdded = () => {
 
 const handleStageUpdated = () => {
   showEditStageModal.value = false
-  editingStage.value = null
+  editingStage.value = {}
   loadProject()
 }
 
 const handleTaskUpdated = () => {
   showEditTaskModal.value = false
-  editingTask.value = null
+  editingTask.value = {}
   loadProject()
 }
 
-const editStage = (stage) => {
+const editStage = (stage: Stage) => {
   editingStage.value = stage
   showEditStageModal.value = true
 }
 
-const editTask = (task) => {
+const editTask = (task: Task) => {
   editingTask.value = task
   showEditTaskModal.value = true
 }
 
-const deleteStage = async (stageId) => {
+const deleteStage = async (stageId: number) => {
   if (confirm('Are you sure you want to delete this stage? This will also delete all tasks in this stage.')) {
     const result = await projectStore.deleteStage(stageId)
     if (result.success) {
@@ -412,7 +418,7 @@ const deleteStage = async (stageId) => {
   }
 }
 
-const deleteTask = async (taskId) => {
+const deleteTask = async (taskId: number) => {
   if (confirm('Are you sure you want to delete this task?')) {
     const result = await projectStore.deleteTask(taskId)
     if (result.success) {
@@ -421,7 +427,7 @@ const deleteTask = async (taskId) => {
   }
 }
 
-const completeTask = async (taskId) => {
+const completeTask = async (taskId: number) => {
   const result = await projectStore.completeTask(taskId)
   if (result.success) {
     loadProject()
@@ -536,108 +542,21 @@ onMounted(() => {
   .project-detail {
     padding: 0.5rem;
   }
-  
+
   .card-body {
     padding: 1.5rem !important;
   }
-  
-  .d-flex.justify-content-between.align-items-start {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 1rem;
-  }
-  
+
   .btn {
     width: 100%;
   }
-  
-  .d-flex.gap-2 {
-    flex-direction: column;
-    gap: 0.5rem !important;
-  }
-  
+
   .d-flex.gap-2 .btn {
     width: 100%;
   }
 }
 
 /* Status and Priority Badge Base Styles */
-.status-planning,
-.status-on-hold,
-.status-active,
-.status-completed,
-.status-cancelled,
-.status-not-started,
-.status-in-progress,
-.status-review,
-.status-blocked,
-.priority-low,
-.priority-medium,
-.priority-high,
-.priority-urgent {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  display: inline-block;
-}
 
-/* Status Colors */
-.status-planning,
-.status-on-hold {
-  background-color: rgba(255, 193, 7, 0.1) !important;
-  color: #ffc107 !important;
-}
 
-.status-active {
-  background-color: rgba(25, 135, 84, 0.1) !important;
-  color: #198754 !important;
-}
-
-.status-completed {
-  background-color: rgba(108, 117, 125, 0.2) !important;
-  color: #000000 !important;
-}
-
-.status-cancelled {
-  background-color: rgba(220, 53, 69, 0.1) !important;
-  color: #dc3545 !important;
-}
-
-.status-not-started {
-  background-color: rgba(108, 117, 125, 0.1) !important;
-  color: #6c757d !important;
-}
-
-.status-in-progress {
-  background-color: rgba(13, 110, 253, 0.1) !important;
-  color: #0d6efd !important;
-}
-
-.status-review {
-  background-color: rgba(13, 202, 240, 0.1) !important;
-  color: #0dcaf0 !important;
-}
-
-.status-blocked {
-  background-color: rgba(220, 53, 69, 0.1) !important;
-  color: #dc3545 !important;
-}
-
-/* Priority Colors */
-.priority-low {
-  background-color: rgba(108, 117, 125, 0.1) !important;
-  color: #6c757d !important;
-}
-
-.priority-medium,
-.priority-high {
-  background-color: rgba(255, 193, 7, 0.1) !important;
-  color: #ffc107 !important;
-}
-
-.priority-urgent {
-  background-color: rgba(220, 53, 69, 0.1) !important;
-  color: #dc3545 !important;
-}
 </style> 

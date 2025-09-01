@@ -69,25 +69,6 @@ export interface AuthStatusResponse {
   user?: User
 }
 
-export interface ApiResponse<T = any> {
-  data: T
-  status: number
-  statusText: string
-}
-
-// Form types
-export interface LoginForm {
-  email: string
-  password: string
-}
-
-export interface RegisterForm {
-  email: string
-  password1: string
-  password2: string
-  username?: string
-}
-
 export interface ProjectForm {
   name: string
   description: string
@@ -108,22 +89,3 @@ export interface TaskForm {
   due_date?: string
 }
 
-// Store types
-export interface AuthState {
-  user: User | null
-  token: string | null
-  isAuthenticated: boolean
-}
-
-export interface ProjectState {
-  projects: Project[]
-  currentProject: Project | null
-  loading: boolean
-  error: string | null
-}
-
-// Router types
-export interface RouteMeta extends Record<string, unknown> {
-  requiresAuth?: boolean
-  requiresGuest?: boolean
-}
