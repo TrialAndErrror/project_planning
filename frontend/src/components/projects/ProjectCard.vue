@@ -83,7 +83,7 @@ const deleteProject = async (projectId: number): Promise<void> => {
           <div class="text-center">
             <div class="h4 fw-bold text-warning mb-1">
               {{ project.stages?.reduce((total: number, stage: any) => 
-                total + stage.tasks.filter((task: any) => task.status === 'done').length, 0) || 0 }}
+                total + stage.tasks.filter((task: any) => task.status === 'completed').length, 0) || 0 }}
             </div>
             <div class="small text-muted">Completed</div>
           </div>
@@ -105,7 +105,7 @@ const deleteProject = async (projectId: number): Promise<void> => {
           <span class="small text-muted">
             {{ project.stages?.length ? 
               Math.round((project.stages.reduce((total: number, stage: any) => 
-                total + stage.tasks.filter((task: any) => task.status === 'done').length, 0) / 
+                total + stage.tasks.filter((task: any) => task.status === 'completed').length, 0) / 
                 project.stages.reduce((total: number, stage: any) => total + stage.tasks.length, 0)) * 100) || 0 : 0 }}%
           </span>
         </div>
@@ -114,12 +114,12 @@ const deleteProject = async (projectId: number): Promise<void> => {
               class="progress-bar bg-primary"
               :style="{ width: `${project.stages?.length ? 
                 Math.round((project.stages.reduce((total, stage) => 
-                  total + stage.tasks.filter(task => task.status === 'done').length, 0) / 
+                  total + stage.tasks.filter(task => task.status === 'completed').length, 0) / 
                   project.stages.reduce((total, stage) => total + stage.tasks.length, 0)) * 100) || 0 : 0}%` }"
               role="progressbar"
               :aria-valuenow="project.stages?.length ? 
                 Math.round((project.stages.reduce((total, stage) => 
-                  total + stage.tasks.filter(task => task.status === 'done').length, 0) / 
+                  total + stage.tasks.filter(task => task.status === 'completed').length, 0) / 
                   project.stages.reduce((total, stage) => total + stage.tasks.length, 0)) * 100) || 0 : 0"
               aria-valuemin="0"
               aria-valuemax="100"

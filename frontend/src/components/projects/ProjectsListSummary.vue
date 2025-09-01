@@ -21,7 +21,7 @@ const totalTasks = computed(() => {
 const completedTasks = computed(() => {
   return projects.value.reduce((total: number, project: Project) => {
     return total + project.stages.reduce((stageTotal: number, stage: any) => {
-      return stageTotal + stage.tasks.filter((task: any) => task.status === 'done').length
+      return stageTotal + stage.tasks.filter((task: any) => task.status === 'completed').length
     }, 0)
   }, 0)
 })

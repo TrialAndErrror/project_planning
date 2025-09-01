@@ -40,8 +40,8 @@ export interface Task {
   id: number
   name: string
   description: string
-  status: 'todo' | 'in_progress' | 'done'
-  priority: 'low' | 'medium' | 'high'
+  status: 'not_started' | 'in_progress' | 'review' | 'completed' | 'blocked'
+  priority: 'low' | 'medium' | 'high' | 'urgent'
   stage: number
   assigned_to?: User
   due_date?: string
@@ -100,8 +100,8 @@ export interface StageForm {
 export interface TaskForm {
   name: string
   description: string
-  status: 'todo' | 'in_progress' | 'done'
-  priority: 'low' | 'medium' | 'high'
+  status: 'not_started' | 'in_progress' | 'review' | 'completed' | 'blocked'
+  priority: 'low' | 'medium' | 'high' | 'urgent'
   stage: number
   assigned_to?: number
   due_date?: string
