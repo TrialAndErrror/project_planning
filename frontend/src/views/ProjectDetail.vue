@@ -194,6 +194,16 @@
                       </div>
                     </div>
                   </div>
+                  
+                  <!-- Add Task Button for this stage -->
+                  <div class="mt-3 p-3 border-top d-block d-lg-flex justify-content-end">
+                    <button
+                        @click="addTaskToStage(stage)"
+                        class="btn btn-primary btn-sm"
+                    >
+                      <i class="bi bi-plus-circle me-2"></i>Add Task to {{ stage.name }}
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -264,6 +274,16 @@
                       </div>
                     </div>
                   </div>
+                  
+                  <!-- Add Task Button for general tasks -->
+                  <div class="mt-3 p-3 border-top d-block d-lg-flex justify-content-end">
+                    <button
+                        @click="addTaskToStage(null)"
+                        class="btn btn-primary btn-sm"
+                    >
+                      <i class="bi bi-plus-circle me-2"></i>Add General Task
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -308,6 +328,16 @@
           :stages="project?.stages || []"
           @saved="handleTaskUpdated"
       />
+
+      <!-- Add Task to Stage Modal -->
+      <AddTaskModal
+          v-model="showAddTaskToStageModal"
+          :project-id="projectId"
+          :stages="project?.stages || []"
+          :prefilled-stage="selectedStageForTask?.id"
+          @saved="handleTaskAddedToStage"
+          @update:modelValue="handleCloseAddTaskToStage"
+      />
     </div>
   </div>
 </template>
@@ -336,8 +366,12 @@ const error = computed(() => projectStore.error)
 const showEditModal = ref(false)
 const showAddStageModal = ref(false)
 const showAddTaskModal = ref(false)
+const showAddTaskToStageModal = ref(false)
 const showEditStageModal = ref(false)
 const showEditTaskModal = ref(false)
+
+// Stage for adding task to
+const selectedStageForTask = ref<Stage | null>(null)
 
 // Editing states
 const editingStage = ref({} as Stage)
@@ -427,6 +461,26 @@ const completeTask = async (taskId: number) => {
     loadProject()
   } else {
     alert('Failed to complete task. Please try again.')
+  }
+}
+
+const addTaskToStage = (stage: Stage | null) => {
+  console.log('addTaskToStage called with:', stage)
+  selectedStageForTask.value = stage
+  console.log('selectedStageForTask set to:', selectedStageForTask.value)
+  showAddTaskToStageModal.value = true
+  console.log('Modal opened, prefilledStage should be:', selectedStageForTask.value?.id)
+}
+
+const handleTaskAddedToStage = () => {
+  showAddTaskToStageModal.value = false
+  selectedStageForTask.value = null
+  loadProject()
+}
+
+const handleCloseAddTaskToStage = (value: boolean) => {
+  if (!value) {
+    selectedStageForTask.value = null
   }
 }
 

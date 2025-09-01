@@ -5,6 +5,27 @@
     </template>
 
     <form @submit.prevent="handleSubmit" class="max-h-[60vh] overflow-x-hidden overflow-y-auto">
+
+      <!-- Stage Selection -->
+      <div class="row mb-3">
+        <div class="col-12 col-lg-3">
+          <label for="stage" class="form-label">
+            Stage (Optional)
+          </label>
+        </div>
+        <div class="col-12 col-lg-9">
+          <select
+              id="stage"
+              v-model="form.stage"
+              class="form-select"
+          >
+            <option value="">No Stage (General Task)</option>
+            <option v-for="stage in stages" :key="stage.id" :value="stage.id">
+              {{ stage.name }}
+            </option>
+          </select>
+        </div>
+      </div>
       <!-- Task Name -->
       <div class="row mb-3">
         <div class="col-12 col-lg-3">
@@ -25,27 +46,6 @@
           <div v-if="errors.name" class="invalid-feedback">
             {{ errors.name }}
           </div>
-        </div>
-      </div>
-
-      <!-- Stage Selection -->
-      <div class="row mb-3">
-        <div class="col-12 col-lg-3">
-          <label for="stage" class="form-label">
-            Stage (Optional)
-          </label>
-        </div>
-        <div class="col-12 col-lg-9">
-          <select
-            id="stage"
-            v-model="form.stage"
-            class="form-select"
-          >
-            <option value="">No Stage (General Task)</option>
-            <option v-for="stage in stages" :key="stage.id" :value="stage.id">
-              {{ stage.name }}
-            </option>
-          </select>
         </div>
       </div>
 
@@ -236,7 +236,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useProjectStore } from '@/stores/project'
 import BaseModal from './BaseModal.vue'
 
@@ -252,6 +252,10 @@ const props = defineProps({
   modelValue: {
     type: Boolean,
     default: false
+  },
+  prefilledStage: {
+    type: Number,
+    default: null
   }
 })
 
@@ -266,7 +270,7 @@ const showTimeline = ref(false)
 const form = reactive({
   name: '',
   description: '',
-  stage: '',
+  stage: props.prefilledStage ? props.prefilledStage.toString() : '',
   priority: 'medium',
   status: 'not_started',
   estimated_hours: 0,
@@ -284,10 +288,22 @@ const isOpen = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
+// Watch for changes in prefilledStage prop and update form
+watch(() => props.prefilledStage, (newStageId) => {
+  console.log('prefilledStage changed:', newStageId)
+  if (newStageId) {
+    form.stage = newStageId.toString()
+    console.log('Set form.stage to:', form.stage)
+  } else {
+    form.stage = ''
+    console.log('Cleared form.stage')
+  }
+}, { immediate: true })
+
 const resetForm = () => {
   form.name = ''
   form.description = ''
-  form.stage = ''
+  form.stage = props.prefilledStage ? props.prefilledStage.toString() : ''
   form.priority = 'medium'
   form.status = 'not_started'
   form.estimated_hours = 0
