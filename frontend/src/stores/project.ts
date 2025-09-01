@@ -354,6 +354,12 @@ export const useProjectStore = defineStore('project', () => {
     return stage ? stage.tasks : []
   }
 
+  const getTasksWithoutStage = (): Task[] => {
+    if (!currentProject.value) return []
+    // Get all tasks that don't have a stage assigned
+    return currentProject.value.tasks?.filter(task => !task.stage || task.stage === null) || []
+  }
+
 
 
   // Toggle methods for expandable sections
@@ -415,6 +421,7 @@ export const useProjectStore = defineStore('project', () => {
     getStatusBadgeClasses,
     getPriorityBadgeClasses,
     getTasksForStage,
+    getTasksWithoutStage,
     
     // UI State management
     toggleStage,

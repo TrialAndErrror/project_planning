@@ -17,6 +17,7 @@ export interface Project {
   updated_at: string
   owner: User
   stages: Stage[]
+  tasks?: Task[]
   stage_count?: number
   task_count?: number
   completed_task_count?: number
@@ -42,7 +43,7 @@ export interface Task {
   description: string
   status: 'not_started' | 'in_progress' | 'review' | 'completed' | 'blocked'
   priority: 'low' | 'medium' | 'high' | 'urgent'
-  stage: number
+  stage?: number
   assigned_to?: User
   due_date?: string
   created_at: string
@@ -102,7 +103,7 @@ export interface TaskForm {
   description: string
   status: 'not_started' | 'in_progress' | 'review' | 'completed' | 'blocked'
   priority: 'low' | 'medium' | 'high' | 'urgent'
-  stage: number
+  stage?: number
   assigned_to?: number
   due_date?: string
 }
