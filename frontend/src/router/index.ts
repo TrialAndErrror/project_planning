@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
@@ -7,7 +7,7 @@ import Projects from '../views/Projects.vue'
 import CreateProject from '../views/CreateProject.vue'
 import ProjectDetail from '../views/ProjectDetail.vue'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'Home',
@@ -57,7 +57,7 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
   
   // Check if user is authenticated
@@ -80,4 +80,4 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-export default router 
+export default router

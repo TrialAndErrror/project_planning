@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
+import type { User, LoginResponse, RegisterResponse, AuthStatusResponse } from '@/types'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 // Create a local axios instance
-const api = axios.create({
+const api: AxiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -13,21 +14,21 @@ const api = axios.create({
 })
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null)
-  const token = ref(localStorage.getItem('token'))
-  const isAuthenticated = ref(false)
+  const user = ref<User | null>(null)
+  const token = ref<string | null>(localStorage.getItem('token'))
+  const isAuthenticated = ref<boolean>(false)
 
   // Set auth token in axios headers
   if (token.value) {
     api.defaults.headers.common['Authorization'] = `Token ${token.value}`
   }
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string) => {
     try {
       console.log('Attempting login with:', { email, password: '***' })
       console.log('API URL:', API_URL)
       
-      const response = await api.post('/api/auth/login/', {
+      const response = await api.post<LoginResponse>('/api/auth/login/', {
         email,
         password
       })
@@ -44,7 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
       api.defaults.headers.common['Authorization'] = `Token ${key}`
       
       return { success: true }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error)
       console.error('Error response:', error.response)
       return { 
@@ -54,9 +55,9 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const register = async (email, password1, password2, username = '') => {
+  const register = async (email: string, password1: string, password2: string, username: string = '') => {
     try {
-      const response = await api.post('/api/auth/registration/', {
+      const response = await api.post<RegisterResponse>('/api/auth/registration/', {
         email,
         password1,
         password2,
@@ -72,7 +73,7 @@ export const useAuthStore = defineStore('auth', () => {
         message: 'Registration successful! Please check your email to verify your account before logging in.',
         data: response.data
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error)
       return { 
         success: false, 
@@ -84,7 +85,7 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = async () => {
     try {
       await api.post('/api/auth/logout/')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Logout error:', error)
     } finally {
       // Clear local state regardless of API call success
@@ -104,9 +105,9 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     try {
-      const response = await api.get('/api/users/auth-status/')
+      const response = await api.get<AuthStatusResponse>('/api/users/auth-status/')
       if (response.data.authenticated) {
-        user.value = response.data.user
+        user.value = response.data.user || null
         isAuthenticated.value = true
       } else {
         // Token is invalid, clear it
@@ -116,7 +117,7 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.removeItem('token')
         delete api.defaults.headers.common['Authorization']
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Auth check error:', error)
       // Clear invalid token
       token.value = null
@@ -136,4 +137,4 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     checkAuth
   }
-}) 
+})

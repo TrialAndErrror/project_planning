@@ -1,14 +1,14 @@
-<script setup>
-import {useProjectStore} from '../../stores/project.js'
+<script setup lang="ts">
+import { useProjectStore } from '@/stores/project'
 import { useRouter } from 'vue-router'
+import type { Project } from '@/types'
 
 // Define props
-const {project} = defineProps({
-  project: {
-    type: Object,
-    required: true
-  }
-})
+interface Props {
+  project: Project
+}
+
+const props = defineProps<Props>()
 
 const projectStore = useProjectStore()
 const router = useRouter()
@@ -17,7 +17,7 @@ const router = useRouter()
 const getStatusLabel = projectStore.getStatusLabel
 const getStatusClasses = projectStore.getStatusBadgeClasses
 
-const formatDate = (dateString) => {
+const formatDate = (dateString: string): string => {
   if (!dateString) return 'N/A'
   const date = new Date(dateString)
   return date.toLocaleDateString('en-US', {
@@ -27,7 +27,7 @@ const formatDate = (dateString) => {
   })
 }
 
-const formatEstimatedTime = (hours, minutes) => {
+const formatEstimatedTime = (hours?: number, minutes?: number): string => {
   if (!hours && !minutes) return '0h'
 
   const totalHours = (hours || 0) + Math.floor((minutes || 0) / 60)
@@ -44,11 +44,11 @@ const formatEstimatedTime = (hours, minutes) => {
   }
 }
 
-const navigateToProject = () => {
-  router.push(`/projects/${project.id}`)
+const navigateToProject = (): void => {
+  router.push(`/projects/${props.project.id}`)
 }
 
-const deleteProject = async (projectId) => {
+const deleteProject = async (projectId: number): Promise<void> => {
   if (confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
     const result = await projectStore.deleteProject(projectId)
     if (!result.success) {
@@ -71,16 +71,13 @@ const deleteProject = async (projectId) => {
       <div class="d-flex justify-content-between align-items-start mb-4">
         <div class="flex-grow-1 me-3">
           <h3 class="card-title h4 text-dark mb-2">
-            {{ project.name || 'Untitled Project' }}
+            {{ project.title || 'Untitled Project' }}
           </h3>
           <p class="text-muted mb-0">
             {{ project.description || 'No description' }}
           </p>
         </div>
         <div class="d-flex flex-column align-items-end">
-          <span class="badge rounded-pill px-3 py-2 mb-2" :class="getStatusClasses(project.status)">
-            {{ getStatusLabel(project.status) }}
-          </span>
           <small class="text-muted">
             Created {{ formatDate(project.created_at) }}
           </small>
@@ -91,28 +88,33 @@ const deleteProject = async (projectId) => {
       <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
           <div class="text-center">
-            <div class="h4 fw-bold text-primary mb-1">{{ project.stage_count || 0 }}</div>
+            <div class="h4 fw-bold text-primary mb-1">{{ project.stages?.length || 0 }}</div>
             <div class="small text-muted">Stages</div>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="text-center">
-            <div class="h4 fw-bold text-success mb-1">{{ project.task_count || 0 }}</div>
+            <div class="h4 fw-bold text-success mb-1">
+              {{ project.stages?.reduce((total: number, stage: any) => total + stage.tasks.length, 0) || 0 }}
+            </div>
             <div class="small text-muted">Tasks</div>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="text-center">
-            <div class="h4 fw-bold text-warning mb-1">{{ project.completed_task_count || 0 }}</div>
+            <div class="h4 fw-bold text-warning mb-1">
+              {{ project.stages?.reduce((total: number, stage: any) => 
+                total + stage.tasks.filter((task: any) => task.status === 'done').length, 0) || 0 }}
+            </div>
             <div class="small text-muted">Completed</div>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="text-center">
             <div class="h4 fw-bold text-info mb-1">
-              {{ formatEstimatedTime(project.total_estimated_hours, project.total_estimated_minutes) }}
+              {{ project.stages?.length || 0 }}
             </div>
-            <div class="small text-muted">Est. Time</div>
+            <div class="small text-muted">Stages</div>
           </div>
         </div>
       </div>
@@ -121,14 +123,25 @@ const deleteProject = async (projectId) => {
       <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <span class="small text-muted">Progress</span>
-          <span class="small text-muted">{{ project.progress_percentage || 0 }}%</span>
+          <span class="small text-muted">
+            {{ project.stages?.length ? 
+              Math.round((project.stages.reduce((total: number, stage: any) => 
+                total + stage.tasks.filter((task: any) => task.status === 'done').length, 0) / 
+                project.stages.reduce((total: number, stage: any) => total + stage.tasks.length, 0)) * 100) || 0 : 0 }}%
+          </span>
         </div>
         <div class="progress" style="height: 8px;">
           <div
               class="progress-bar bg-primary"
-              :style="{ width: `${project.progress_percentage || 0}%` }"
+              :style="{ width: `${project.stages?.length ? 
+                Math.round((project.stages.reduce((total, stage) => 
+                  total + stage.tasks.filter(task => task.status === 'done').length, 0) / 
+                  project.stages.reduce((total, stage) => total + stage.tasks.length, 0)) * 100) || 0 : 0}%` }"
               role="progressbar"
-              :aria-valuenow="project.progress_percentage || 0"
+              :aria-valuenow="project.stages?.length ? 
+                Math.round((project.stages.reduce((total, stage) => 
+                  total + stage.tasks.filter(task => task.status === 'done').length, 0) / 
+                  project.stages.reduce((total, stage) => total + stage.tasks.length, 0)) * 100) || 0 : 0"
               aria-valuemin="0"
               aria-valuemax="100"
           ></div>

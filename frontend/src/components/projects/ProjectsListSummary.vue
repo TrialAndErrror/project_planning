@@ -1,6 +1,6 @@
 <script setup>
 
-import {useProjectStore} from "../../stores/project.js";
+import { useProjectStore } from "@/stores/project";
 
 import { computed } from 'vue'
 const projectStore = useProjectStore()
