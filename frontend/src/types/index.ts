@@ -35,6 +35,7 @@ export interface Stage {
   updated_at: string
   task_count?: number
   completed_task_count?: number
+  status?: string
 }
 
 export interface Task {
@@ -48,6 +49,17 @@ export interface Task {
   due_date?: string
   created_at: string
   updated_at: string
+  // Additional fields from backend
+  estimated_hours?: number
+  estimated_minutes?: number
+  estimated_time_formatted?: string
+  actual_hours?: number
+  actual_minutes?: number
+  actual_time_formatted?: string
+  project?: number
+  project_name?: string
+  stage_name?: string
+  owner?: User
 }
 
 // API Response types

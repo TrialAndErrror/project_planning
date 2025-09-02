@@ -1,7 +1,12 @@
 <template>
   <div id="app">
+
+    
     <nav v-if="authStore.isAuthenticated" class="navbar">
-      <div class="nav-brand">Project Planning</div>
+      <div class="nav-brand">
+        <i class="bi bi-kanban me-2"></i>
+        Project Planning
+      </div>
       <div class="nav-links">
         <router-link to="/projects" class="nav-link">Projects</router-link>
         <button @click="logout" class="nav-link logout-btn">Logout</button>
@@ -16,11 +21,14 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
 
 const logout = async () => {
   await authStore.logout()
+  router.push('/login')
 }
 </script>
 
@@ -49,11 +57,22 @@ body {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1000;
 }
 
 .nav-brand {
   font-size: 1.5rem;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav-brand:hover {
+  color: #3498db;
 }
 
 .nav-links {
@@ -65,13 +84,33 @@ body {
 .nav-link {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
 }
 
 .nav-link:hover {
-  background-color: #34495e;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-link:hover::before {
+  left: 100%;
 }
 
 .logout-btn {
@@ -82,8 +121,6 @@ body {
 }
 
 .main-content {
-  padding: 2rem;
-  max-width: 1200px;
   margin: 0 auto;
 }
 

@@ -149,7 +149,7 @@ const handleRegister = async () => {
 
 <style scoped>
 .register-container {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2c3e50;
   min-height: 100vh;
 }
 
@@ -170,15 +170,16 @@ const handleRegister = async () => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+  background: linear-gradient(135deg, #3498db, #2c3e50);
   border: none;
   transition: all 0.3s ease;
+  font-weight: 600;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #0b5ed7 0%, #0a58ca 100%);
+  background: linear-gradient(135deg, #2980b9, #34495e);
   transform: translateY(-1px);
-  box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.3);
+  box-shadow: 0 0.5rem 1rem rgba(52, 152, 219, 0.3);
 }
 
 .btn-primary:disabled {

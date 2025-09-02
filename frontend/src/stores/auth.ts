@@ -118,7 +118,6 @@ export const useAuthStore = defineStore('auth', () => {
         delete api.defaults.headers.common['Authorization']
       }
     } catch (error: any) {
-      console.error('Auth check error:', error)
       // Clear invalid token
       token.value = null
       user.value = null

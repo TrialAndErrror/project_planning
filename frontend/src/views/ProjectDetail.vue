@@ -110,18 +110,18 @@
                     @click="toggleStage(stage.id)"
                 >
                   <div class="d-flex justify-content-between align-items-center">
-                    <div class="col-12 col-lg-6 d-flex align-items-center justify-content-between">
+                    <div class="col-12 col-lg-6 d-flex align-items-center justify-content-start">
                       <div class="d-flex gap-3">
                         <i class="bi" :class="isStageExpanded(stage.id) ? 'bi-folder2-open' : 'bi-folder'"></i>
                         <span class="fw-semibold text-dark">{{ stage.name }}</span>
-                      </div>
-                      <div class="d-flex gap-3">
-                      <span class="badge rounded-pill" :class="getStatusBadgeClasses(stage.status)">
-                        {{ getStatusLabel(stage.status) }}
+                        <span class="badge rounded-pill" :class="getStatusBadgeClasses(stage.status || 'not_started')">
+                        {{ getStatusLabel(stage.status || 'not_started') }}
                       </span>
                       </div>
                     </div>
-                    <div class="col-lg-6 d-none d-lg-flex align-items-center gap-2">
+                    <div class="col-lg-6 d-none d-lg-flex justify-content-lg-end align-items-center gap-2">
+
+
                       <small class="text-muted">{{ stage.task_count }} tasks</small>
                       <button
                           @click.stop="editStage(stage)"
@@ -295,7 +295,7 @@
       <!-- Edit Project Modal -->
       <EditProjectModal
           v-model="showEditModal"
-          :project="project"
+          :project="project || {}"
           @saved="handleProjectUpdated"
       />
 
@@ -357,7 +357,10 @@ const route = useRoute()
 const router = useRouter()
 const projectStore = useProjectStore()
 
-const projectId = computed(() => route.params.id)
+const projectId = computed(() => {
+  const id = route.params.id
+  return typeof id === 'string' ? parseInt(id, 10) : Array.isArray(id) ? parseInt(id[0], 10) : 0
+})
 const project = computed(() => projectStore.currentProject)
 const loading = computed(() => projectStore.loading)
 const error = computed(() => projectStore.error)

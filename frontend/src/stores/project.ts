@@ -357,7 +357,9 @@ export const useProjectStore = defineStore('project', () => {
   const getTasksWithoutStage = (): Task[] => {
     if (!currentProject.value) return []
     // Get all tasks that don't have a stage assigned
-    return currentProject.value.tasks?.filter(task => !task.stage || task.stage === null) || []
+    // Check if tasks property exists, otherwise return empty array
+    if (!currentProject.value.tasks) return []
+    return currentProject.value.tasks.filter(task => !task.stage || task.stage === null)
   }
 
 
